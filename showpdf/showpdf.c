@@ -71,8 +71,7 @@ static gboolean load_pdf(struct application_info *app, char *path)
 	{
 		fprintf(stderr, "load_pdf: PDF has <= 0 pages.\n");
 		free(data);
-		/* FIXME: How to free app->pdf.doc? We quit anyway, so it's not
-		 * that important... */
+		g_object_unref(app->pdf.doc);
 		return FALSE;
 	}
 
