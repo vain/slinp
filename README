@@ -1,3 +1,99 @@
 pdfpres -- KISS version.
 
 https://en.wikipedia.org/wiki/KISS_principle
+
+http://www.uninformativ.de/projects/?q=pdfpres
+
+
+History and "Why?"
+==================
+
+The original pdfpres grew a lot over time. Featuritis. I didn't realize
+this until it was too late. Sorry. I can no longer maintain the old
+code because I simply don't have the resources to do so. The branches
+"master" (Gtk2 version) and "gtk3" will freeze. Feel free to fork the
+old program.
+
+The new pdfpres is supposed to be a minimalistic KISS application that
+follows the Unix philosophy. The main design goal is to keep it as
+simple and as small as possible. This means it won't be a "typical" GUI
+application that just "does everything". I'll only implement features
+that I *really* need.
+
+The new pdfpres is released as PIZZA-WARE.
+
+
+New Architecture
+================
+
+pdfpres is now a toolchest that comprises several individual programs.
+
+One of them is showpdf. This tool's job is to display one page of one
+PDF file in one window. It will read simple commands on STDIN to
+navigate in the PDF file. That's it -- nothing else.
+
+There's going to be a control program (or script). It will start several
+instances of showpdf. The control program will accept your commands:
+Show next slide, show previous slide and so on.
+
+There's going to be at least one more program: It'll show your notes.
+This program will be started by the control program as well. Maybe I'll
+also implement a little timer and/or clock just like in the original
+pdfpres.
+
+To sum it up, we'll get something like this:
+
+
+    +-------------+  +-------------+  +-------------+    +-------------+
+    |   showpdf   |  |   showpdf   |  |   showpdf   |    |   showpdf   |
+    | (preview 1) |  | (preview 2) |  | (preview 3) |    | (projector) |
+    +-------------+  +-------------+  +-------------+    +-------------+
+           ^                ^                ^                  ^
+           |                |                |                  |
+           |                |                |                  |
+           +--------------+ | +--------------+                  |
+                          | | |                                 |
+                          | | | +-------------------------------+
+                          | | | |
+      +-------+        +---------+        +-------+
+      | notes | <----- | CONTROL | -----> | timer |
+      +-------+        | PROGRAM |        +-------+
+                       +---------+
+
+                           ^|
+                           ||
+                           ||
+                           ||
+                           |v
+
+                        ========
+                          User
+                        ========
+
+
+Why is this better than the old pdfpres?
+
+	- Each component will be a simple component that is relatively easy
+	  to maintain. No more 2500 lines of C code.
+	- Each component will be a one process. This means, we'll
+	  automatically benefit from multiprocessor systems (they are
+	  ubiquitous today) without having to worry about multithreading!
+	- Although showpdf will be a C program, the other components can be
+	  shell scripts or whatever. This saves me a hell lot of time.
+	- It's a lot easier to customize and extend. Users can even
+	  re-implement whole components if they don't like mine.
+	- Some components (such as showpdf) may turn out to be universal
+	  components that can be used outside of pdfpres.
+
+
+Downsides?
+
+	- pdfpres no longer arranges the windows for you. Well, it could do
+	  so, but I don't intend to implement that as a part of pdfpres.
+	  It's your window manager's job now. It's likely that I'm going to
+	  add a special layout for the Awesome WM, though -- this will be
+	  part of awesome-vain.
+	- It may get harder for other users to work with pdfpres. Sorry but
+	  I simply can not maintain a full blown GUI application (as pointed
+	  out above). A comparison: The old pdfpres was Firefox, the new
+	  pdfpres is uzbl. Something like that.
