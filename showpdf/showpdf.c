@@ -80,6 +80,30 @@ static gboolean load_pdf(struct application_info *app, char *path)
 	return TRUE;
 }
 
+static void update_window_title(struct application_info *app)
+{
+	gchar *doc_title = poppler_document_get_title(app->pdf.doc);
+	gchar *window_title = NULL;
+
+	if (doc_title == NULL)
+		doc_title = g_strdup("<Untitled>");
+
+	if (app->pdf.page < 0 || app->pdf.page >= app->pdf.num_pages)
+	{
+		window_title = g_strdup_printf("showpdf: %s", doc_title);
+	}
+	else
+	{
+		window_title = g_strdup_printf("showpdf: %s [%d]", doc_title,
+		                               app->pdf.page + 1);
+	}
+
+	gtk_window_set_title(GTK_WINDOW(app->gui.window), window_title);
+
+	g_free(doc_title);
+	g_free(window_title);
+}
+
 static gboolean on_canvas_draw(GtkWidget *widget, cairo_t *cr,
                                struct application_info *app)
 {
@@ -175,13 +199,12 @@ static void create_gui(struct application_info *app)
 {
 	/* Main window. */
 	app->gui.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(app->gui.window),
-	                     app->gui.window_title);
 	g_signal_connect(G_OBJECT(app->gui.window), "delete_event",
 	                 G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(G_OBJECT(app->gui.window), "destroy",
 	                 G_CALLBACK(gtk_main_quit), NULL);
 	gtk_window_set_has_resize_grip(GTK_WINDOW(app->gui.window), FALSE);
+	update_window_title(app);
 
 	/* PDF drawing area. */
 	app->gui.canvas = gtk_drawing_area_new();
@@ -228,6 +251,7 @@ static gboolean read_stdin(GIOChannel *source, GIOCondition condition,
 			if (g_strcmp0(tokens[0], "go_page") == 0)
 			{
 				app->pdf.page = atoi(tokens[1]);
+				update_window_title(app);
 				gtk_widget_queue_draw(app->gui.canvas);
 			}
 		}
@@ -281,8 +305,6 @@ int main(int argc, char *argv[])
 	setup_watch_stdin(&app);
 
 	/* Create all widgets, show them, connect signals, ... */
-	/* TODO: Read window title from PDF? */
-	app.gui.window_title = "PDF";
 	create_gui(&app);
 
 	gtk_main();

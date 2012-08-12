@@ -15,7 +15,6 @@
 struct gui_info
 {
 	GtkWidget *window;
-	char *window_title;
 
 	GtkWidget *canvas;
 	int canvas_width, canvas_height;
