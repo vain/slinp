@@ -97,8 +97,9 @@ static void update_window_title(struct application_info *app)
 	}
 	else
 	{
-		window_title = g_strdup_printf("showpdf: %s [%d]", doc_title,
-		                               app->pdf.page + 1);
+		window_title = g_strdup_printf("showpdf: %s [%d/%d]", doc_title,
+		                               app->pdf.page + 1,
+		                               app->pdf.num_pages);
 	}
 
 	gtk_window_set_title(GTK_WINDOW(app->gui.window), window_title);
