@@ -56,6 +56,9 @@ static gboolean load_pdf(struct application_info *app, char *path)
 		return FALSE;
 	}
 
+	/* Note: You must never ever free(data) if the following call
+	 * succeeded. Poppler expects the data to be valid all the time,
+	 * i.e. it doesn't copy it to its own memory or sth. like that. */
 	app->pdf.doc = poppler_document_new_from_data(data, data_size,
 	                                              NULL, &err);
 	if (app->pdf.doc == NULL)
