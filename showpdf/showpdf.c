@@ -133,14 +133,19 @@ static gboolean on_canvas_draw(GtkWidget *widget, cairo_t *cr,
 		ty = (app->gui.canvas_height - popheight * scale) * 0.5;
 	}
 
-	/* A white background, i.e. "paper color". Push and pop cairo
-	 * contexts, so we have a clean state afterwards. */
-	/* TODO: The background of the PDF must be white, anything else must
-	 * be black. */
+	/* A black background. Push and pop cairo contexts, so we have a
+	 * clean state afterwards. */
 	cairo_save(cr);
-	cairo_set_source_rgb(cr, 1, 1, 1);
+	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_rectangle(cr, 0, 0,
 	                app->gui.canvas_width, app->gui.canvas_height);
+	cairo_fill(cr);
+	cairo_restore(cr);
+
+	/* A white background, i.e. "paper color", only below the PDF. */
+	cairo_save(cr);
+	cairo_set_source_rgb(cr, 1, 1, 1);
+	cairo_rectangle(cr, tx, ty, w, h);
 	cairo_fill(cr);
 	cairo_restore(cr);
 
