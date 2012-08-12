@@ -203,17 +203,38 @@ static gboolean read_stdin(GIOChannel *source, GIOCondition condition,
 	(void)source;
 	(void)condition;
 
-	/* Mixing stdio.h and GIO is probably a bad idea, thus we better use
-	 * GIO here to read from stdin. */
 	GString *buffer = g_string_new("");
 	GError *err = NULL;
+	gchar **tokens = NULL;
+	gchar *line_copy = NULL;
+	gint num_tokens = 0;
 	struct application_info *app = (struct application_info *)data;
 
+	/* Mixing stdio.h and GIO is probably a bad idea, thus we better use
+	 * GIO here to read from stdin. */
 	if (g_io_channel_read_line_string(app->gio.stdin_channel, buffer,
-	                          NULL, &err) == G_IO_STATUS_NORMAL)
+	                                  NULL, &err) == G_IO_STATUS_NORMAL)
 	{
-		printf("read: '%s'\n", buffer->str);
-		/* TODO: Act upon this command. */
+		/* Copy string from GString into a gchar so we can use
+		 * g_strchomp() on it. */
+		line_copy = g_strdup(buffer->str);
+		g_string_free(buffer, TRUE);
+
+		tokens = g_strsplit(g_strchomp(line_copy), " ", -1);
+		for (num_tokens = 0; tokens[num_tokens] != NULL; num_tokens++)
+			/* No body, just count the tokens. */ ;
+
+		if (num_tokens >= 2)
+		{
+			if (g_strcmp0(tokens[0], "go_page") == 0)
+			{
+				app->pdf.page = atoi(tokens[1]);
+				gtk_widget_queue_draw(app->gui.canvas);
+			}
+		}
+
+		g_strfreev(tokens);
+		g_free(line_copy);
 	}
 
 	if (err != NULL)
