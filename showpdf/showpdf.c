@@ -230,6 +230,7 @@ static gboolean read_stdin(GIOChannel *source, GIOCondition condition,
 	gchar **tokens = NULL;
 	gchar *line_copy = NULL;
 	gint num_tokens = 0;
+	int new_page = 0;
 	struct application_info *app = (struct application_info *)data;
 
 	/* Mixing stdio.h and GIO is probably a bad idea, thus we better use
@@ -250,7 +251,15 @@ static gboolean read_stdin(GIOChannel *source, GIOCondition condition,
 		{
 			if (g_strcmp0(tokens[0], "go_page") == 0)
 			{
-				app->pdf.page = atoi(tokens[1]);
+				/* We expect 1-based page numbers here. Internally,
+				 * though, we use 0-based page numbers (poppler wants
+				 * them anyway). */
+				new_page = atoi(tokens[1]);
+				if (new_page <= 0 || new_page > app->pdf.num_pages)
+					app->pdf.page = -1;
+				else
+					app->pdf.page = new_page - 1;
+
 				update_window_title(app);
 				gtk_widget_queue_draw(app->gui.canvas);
 			}
