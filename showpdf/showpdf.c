@@ -76,6 +76,8 @@ static gboolean load_pdf(struct application_info *app, char *path)
 		return FALSE;
 	}
 
+	app->pdf.page = 0;
+
 	return TRUE;
 }
 
@@ -85,14 +87,70 @@ static gboolean on_canvas_draw(GtkWidget *widget, cairo_t *cr,
 	/* Unused. */
 	(void)widget;
 
-	/* TODO: This is a dummy. Draw actual PDF on black background. */
+	gdouble popwidth, popheight;
+	gdouble screen_ratio, page_ratio, scale;
+	gdouble tx, ty, w, h;
+	PopplerPage *page = NULL;
+
+	/* Display nothing? */
+	if (app->pdf.page < 0 || app->pdf.page >= app->pdf.num_pages)
+	{
+		cairo_save(cr);
+		cairo_set_source_rgb(cr, 0, 0, 0);
+		cairo_rectangle(cr, 0, 0,
+		                app->gui.canvas_width, app->gui.canvas_height);
+		cairo_fill(cr);
+		cairo_restore(cr);
+		return TRUE;
+	}
+
+	/* Get the page and its size. */
+	page = poppler_document_get_page(app->pdf.doc, app->pdf.page);
+	poppler_page_get_size(page, &popwidth, &popheight);
+
+	/* That's it: Compare screen and page ratio. This will cover all 4
+	 * cases that could happen. */
+	page_ratio = popwidth / popheight;
+	screen_ratio = (double)app->gui.canvas_width /
+	               (double)app->gui.canvas_height;
+
+	if (screen_ratio > page_ratio)
+	{
+		/* Fit size. */
+		h = app->gui.canvas_height;
+		w = h * page_ratio;
+		scale = h / popheight;
+		/* Center page. */
+		tx = (app->gui.canvas_width - popwidth * scale) * 0.5;
+		ty = 0;
+	}
+	else
+	{
+		w = app->gui.canvas_width;
+		h = w / page_ratio;
+		scale = w / popwidth;
+		tx = 0;
+		ty = (app->gui.canvas_height - popheight * scale) * 0.5;
+	}
+
+	/* A white background, i.e. "paper color". Push and pop cairo
+	 * contexts, so we have a clean state afterwards. */
+	/* TODO: The background of the PDF must be white, anything else must
+	 * be black. */
 	cairo_save(cr);
-	cairo_set_source_rgb(cr, 0, 1, 0);
-	cairo_rectangle(cr, 1, 1,
-	                app->gui.canvas_width - 2,
-	                app->gui.canvas_height - 2);
+	cairo_set_source_rgb(cr, 1, 1, 1);
+	cairo_rectangle(cr, 0, 0,
+	                app->gui.canvas_width, app->gui.canvas_height);
 	cairo_fill(cr);
 	cairo_restore(cr);
+
+	/* Render the page centered and scaled. */
+	cairo_translate(cr, tx, ty);
+	cairo_scale(cr, scale, scale);
+	poppler_page_render(page, cr);
+
+	/* We no longer need that page. */
+	g_object_unref(G_OBJECT(page));
 
 	/* Nobody else draws to this widget. */
 	return TRUE;

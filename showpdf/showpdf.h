@@ -25,6 +25,7 @@ struct pdf_info
 {
 	PopplerDocument *doc;
 	int num_pages;
+	int page;
 };
 
 struct gio_info
