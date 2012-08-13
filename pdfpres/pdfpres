@@ -55,9 +55,9 @@ class Pdfpres(object):
         return p
 
     def read_notes(self):
-        """Run "pdfpres_notes" to get the notes for the current slide."""
+        """Run "slidenotes" to get the notes for the current slide."""
         p = subprocess.Popen([
-                                  'pdfpres_notes',
+                                  'slidenotes',
                                   '{0}.notes'.format(self.path),
                                   '{0}'.format(self.page)
                              ],
