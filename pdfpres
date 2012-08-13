@@ -22,8 +22,13 @@ class Pdfpres(object):
             if fields[0] == 'Pages':
                 self.num_pages = int(fields[1])
 
-    def launch_preview(self, offset):
-        self.previews.append( (self.run_showpdf(str(offset)), offset) )
+    def launch_preview_range(self, a, b):
+        for offset in range(a, b + 1, 1):
+            self.launch_preview(a, b, offset)
+
+    def launch_preview(self, a, b, offset):
+        iname = '{0}_{1}_{2}'.format(a, b, offset)
+        self.previews.append( (self.run_showpdf(iname), offset) )
 
     def launch_projector(self):
         self.projector = self.run_showpdf('projector')
@@ -76,8 +81,7 @@ class Pdfpres(object):
 def application(window, path):
     p = Pdfpres(window, path)
     p.read_pdf_meta()
-    for offset in range(-1, 2, 1):
-        p.launch_preview(offset)
+    p.launch_preview_range(-1, 1)
     p.launch_projector()
     p.navigate_current()
     p.interaction_loop()
