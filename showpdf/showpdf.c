@@ -78,7 +78,8 @@ static gboolean load_pdf(struct application_info *app, char *path)
 		return FALSE;
 	}
 
-	app->pdf.page = 0;
+	/* We will start with a blank window. */
+	app->pdf.page = -1;
 
 	return TRUE;
 }
