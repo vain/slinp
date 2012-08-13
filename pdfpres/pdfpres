@@ -16,6 +16,11 @@ class Pdfpres(object):
         self.notes = []
 
     def read_pdf_meta(self):
+        """Read PDF metadata using "pdfinfo".
+
+        Currently, this only determines how many pages there are in the PDF
+        file.
+        """
         p = subprocess.Popen(['pdfinfo', self.path], stdout=subprocess.PIPE)
         (stdoutdata, _) = p.communicate()
         lines = str(stdoutdata, 'UTF-8').split('\n')
@@ -25,37 +30,43 @@ class Pdfpres(object):
                 self.num_pages = int(fields[1])
 
     def launch_preview_range(self, a, b):
+        """Launch all instances of "showpdf" (preview windows)."""
         for offset in range(a, b + 1, 1):
             self.launch_preview(a, b, offset)
 
     def launch_preview(self, a, b, offset):
+        """Launch one instance of "showpdf" (one preview window)."""
         iname = '{0}_{1}_{2}'.format(a, b, offset)
         self.previews.append( (self.run_showpdf(iname), offset) )
 
     def launch_projector(self):
+        """Launch one instance of "showpdf", the projector window."""
         self.projector = self.run_showpdf('projector')
 
     def run_showpdf(self, instance_name):
+        """Run "showpdf" and return the Popen object."""
         p = subprocess.Popen([
-                                'showpdf',
-                                '--name',
-                                instance_name,
-                                self.path
+                                  'showpdf',
+                                  '--name',
+                                  instance_name,
+                                  self.path
                              ],
                              bufsize=0, stdin=subprocess.PIPE)
         return p
 
     def read_notes(self):
+        """Run "pdfpres_notes" to get the notes for the current slide."""
         p = subprocess.Popen([
-                                'pdfpres_notes',
-                                '{0}.notes'.format(self.path),
-                                '{0}'.format(self.page)
+                                  'pdfpres_notes',
+                                  '{0}.notes'.format(self.path),
+                                  '{0}'.format(self.page)
                              ],
                              stdout=subprocess.PIPE)
         (stdoutdata, _) = p.communicate()
         self.notes = str(stdoutdata, 'UTF-8').split('\n')
 
     def show_current_info(self):
+        """Show current slide number and the slide's notes."""
         self.window.erase()
         (height, width) = self.window.getmaxyx()
 
@@ -69,6 +80,7 @@ class Pdfpres(object):
                 break
 
     def navigate_current(self):
+        """Issue a "go_page n" in all instance of "showpdf", read notes."""
         if self.projector_blank:
             self.projector.stdin.write(bytes('go_page -1\n', 'UTF-8'))
         else:
@@ -81,21 +93,25 @@ class Pdfpres(object):
         self.read_notes()
 
     def next_slide(self):
+        """Go the next slide unless we're already at the end."""
         if self.page < self.num_pages:
             self.page += 1
             self.navigate_current()
 
     def prev_slide(self):
+        """Go the previous slide unless we're already at the beginning."""
         if self.page > 1:
             self.page -= 1
             self.navigate_current()
 
     def end_children(self):
+        """Kill all instance of "showpdf" that we know of."""
         self.projector.kill()
         for (p, _) in self.previews:
             p.kill()
 
     def interaction_loop(self):
+        """Wait for user commands and act upon them."""
         while True:
             self.show_current_info()
             c = self.window.getch()
@@ -113,6 +129,7 @@ class Pdfpres(object):
 
 
 def application(window, path):
+    """Fire up the applications."""
     p = Pdfpres(window, path)
     p.read_pdf_meta()
     p.launch_preview_range(-1, 1)
