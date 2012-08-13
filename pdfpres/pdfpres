@@ -14,6 +14,7 @@ class Pdfpres(object):
         self.page = 1
         self.num_pages = None
         self.notes = []
+        self.stopclock = None
 
     def read_pdf_meta(self):
         """Read PDF metadata using "pdfinfo".
@@ -53,6 +54,11 @@ class Pdfpres(object):
                              ],
                              bufsize=0, stdin=subprocess.PIPE)
         return p
+
+    def launch_stopclock(self):
+        """Run "stopclock"."""
+        p = subprocess.Popen(['stopclock'], bufsize=0, stdin=subprocess.PIPE)
+        self.stopclock = p
 
     def read_notes(self):
         """Run "slidenotes" to get the notes for the current slide."""
@@ -104,11 +110,24 @@ class Pdfpres(object):
             self.page -= 1
             self.navigate_current()
 
+    def stopclock_start(self):
+        """Issue a "start" on the stopclock."""
+        self.stopclock.stdin.write(bytes('start\n', 'UTF-8'))
+
+    def stopclock_pause(self):
+        """Issue a "pause" on the stopclock."""
+        self.stopclock.stdin.write(bytes('pause\n', 'UTF-8'))
+
+    def stopclock_reset(self):
+        """Issue a "reset" on the stopclock."""
+        self.stopclock.stdin.write(bytes('reset\n', 'UTF-8'))
+
     def end_children(self):
-        """Kill all instance of "showpdf" that we know of."""
+        """Kill all instance of "showpdf" and "stopclock" that we know of."""
         self.projector.kill()
         for (p, _) in self.previews:
             p.kill()
+        self.stopclock.kill()
 
     def interaction_loop(self):
         """Wait for user commands and act upon them."""
@@ -123,6 +142,12 @@ class Pdfpres(object):
             elif c == ord('b'):
                 self.projector_blank = not self.projector_blank
                 self.navigate_current()
+            elif c == ord('a'):
+                self.stopclock_start()
+            elif c == ord('s'):
+                self.stopclock_pause()
+            elif c == ord('d'):
+                self.stopclock_reset()
             elif c == ord('q'):
                 self.end_children()
                 return
@@ -134,6 +159,7 @@ def application(window, path):
     p.read_pdf_meta()
     p.launch_preview_range(-1, 1)
     p.launch_projector()
+    p.launch_stopclock()
     p.navigate_current()
     p.interaction_loop()
 
