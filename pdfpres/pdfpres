@@ -13,6 +13,7 @@ class Pdfpres(object):
         self.projector_blank = False
         self.page = 1
         self.num_pages = None
+        self.notes = []
 
     def read_pdf_meta(self):
         p = subprocess.Popen(['pdfinfo', self.path], stdout=subprocess.PIPE)
@@ -44,6 +45,29 @@ class Pdfpres(object):
                              bufsize=0, stdin=subprocess.PIPE)
         return p
 
+    def read_notes(self):
+        p = subprocess.Popen([
+                                'pdfpres_notes',
+                                '{0}.notes'.format(self.path),
+                                '{0}'.format(self.page)
+                             ],
+                             stdout=subprocess.PIPE)
+        (stdoutdata, _) = p.communicate()
+        self.notes = str(stdoutdata, 'UTF-8').split('\n')
+
+    def show_current_info(self):
+        self.window.erase()
+        (height, width) = self.window.getmaxyx()
+
+        self.window.addstr(0, 2, '--> {0} <--'.format(self.page))
+
+        line_number = 2
+        for line in self.notes:
+            self.window.addstr(line_number, 0, line)
+            line_number += 1
+            if line_number == height:
+                break
+
     def navigate_current(self):
         if self.projector_blank:
             self.projector.stdin.write(bytes('go_page -1\n', 'UTF-8'))
@@ -53,6 +77,8 @@ class Pdfpres(object):
         for (p, offset) in self.previews:
             p.stdin.write(bytes('go_page {0}\n'.format(self.page + offset),
                                 'UTF-8'))
+
+        self.read_notes()
 
     def next_slide(self):
         if self.page < self.num_pages:
@@ -71,6 +97,7 @@ class Pdfpres(object):
 
     def interaction_loop(self):
         while True:
+            self.show_current_info()
             c = self.window.getch()
 
             if c == ord('j'):
