@@ -10,6 +10,7 @@ class Pdfpres(object):
         self.path = path
         self.previews = []
         self.projector = None
+        self.projector_blank = False
         self.page = 1
         self.num_pages = None
 
@@ -44,8 +45,11 @@ class Pdfpres(object):
         return p
 
     def navigate_current(self):
-        self.projector.stdin.write(bytes('go_page {0}\n'.format(self.page),
-                                         'UTF-8'))
+        if self.projector_blank:
+            self.projector.stdin.write(bytes('go_page -1\n', 'UTF-8'))
+        else:
+            self.projector.stdin.write(bytes('go_page {0}\n'.format(self.page),
+                                             'UTF-8'))
         for (p, offset) in self.previews:
             p.stdin.write(bytes('go_page {0}\n'.format(self.page + offset),
                                 'UTF-8'))
@@ -73,6 +77,9 @@ class Pdfpres(object):
                 self.next_slide()
             elif c == ord('k'):
                 self.prev_slide()
+            elif c == ord('b'):
+                self.projector_blank = not self.projector_blank
+                self.navigate_current()
             elif c == ord('q'):
                 self.end_children()
                 return
