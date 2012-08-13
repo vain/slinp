@@ -135,7 +135,7 @@ class Pdfpres(object):
             self.show_current_info()
             c = self.window.getch()
 
-            if c == ord('j'):
+            if c == ord('j') or c == ord(' '):
                 self.next_slide()
             elif c == ord('k'):
                 self.prev_slide()
