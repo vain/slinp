@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+
+import subprocess
+import curses
+import sys
+
+class Pdfpres(object):
+    def __init__(self, window, path):
+        self.window = window
+        self.path = path
+        self.previews = []
+        self.projector = None
+        self.page = 1
+        self.num_pages = None
+
+    def read_pdf_meta(self):
+        p = subprocess.Popen(['pdfinfo', self.path], stdout=subprocess.PIPE)
+        (stdoutdata, _) = p.communicate()
+        lines = str(stdoutdata, 'UTF-8').split('\n')
+        for i in lines:
+            fields = [f.strip() for f in i.split(':')]
+            if fields[0] == 'Pages':
+                self.num_pages = int(fields[1])
+
+    def launch_preview(self, offset):
+        self.previews.append( (self.run_showpdf(str(offset)), offset) )
+
+    def launch_projector(self):
+        self.projector = self.run_showpdf('projector')
+
+    def run_showpdf(self, instance_name):
+        p = subprocess.Popen([
+                                'showpdf',
+                                '--name',
+                                instance_name,
+                                self.path
+                             ],
+                             bufsize=0, stdin=subprocess.PIPE)
+        return p
+
+    def navigate_current(self):
+        self.projector.stdin.write(bytes('go_page {0}\n'.format(self.page),
+                                         'UTF-8'))
+        for (p, offset) in self.previews:
+            p.stdin.write(bytes('go_page {0}\n'.format(self.page + offset),
+                                'UTF-8'))
+
+    def next_slide(self):
+        if self.page < self.num_pages:
+            self.page += 1
+            self.navigate_current()
+
+    def prev_slide(self):
+        if self.page > 1:
+            self.page -= 1
+            self.navigate_current()
+
+    def end_children(self):
+        self.projector.kill()
+        for (p, _) in self.previews:
+            p.kill()
+
+    def interaction_loop(self):
+        while True:
+            c = self.window.getch()
+
+            if c == ord('j'):
+                self.next_slide()
+            elif c == ord('k'):
+                self.prev_slide()
+            elif c == ord('q'):
+                self.end_children()
+                return
+
+
+def application(window, path):
+    p = Pdfpres(window, path)
+    p.read_pdf_meta()
+    for offset in range(-1, 2, 1):
+        p.launch_preview(offset)
+    p.launch_projector()
+    p.navigate_current()
+    p.interaction_loop()
+
+
+if __name__ == '__main__':
+    try:
+        curses.wrapper(application, sys.argv[1])
+    except KeyboardInterrupt:
+        pass
+
+
+# vim: set tw=80 ts=4 sw=4 et sta :
