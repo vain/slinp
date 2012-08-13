@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if (( $# < 2 ))
+then
+	cat >&2 <<-EOM
+	Usage: $0 <path to notes> <slidenum>"
+
+	Use the following format for your notes:
+
+	  {{{ 1
+	  Notes for slide number 1.
+	  }}}
+
+	  {{{ 10
+	  Things to mention on slide number 10.
+
+	  Whatever.
+
+	  Note that this format is designed to make use of Vim folding.
+
+	  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae
+	  tellus id purus consectetur sollicitudin. Suspendisse potenti.
+	  Pellentesque habitant morbi tristique senectus et netus et malesuada
+	  fames ac turpis egestas. Maecenas mollis venenatis arcu eu elementum.
+	  Aenean eu leo nec massa feugiat lacinia. Fusce elementum euismod odio,
+	  quis bibendum ligula porttitor vitae.
+	  }}}
+	EOM
+	exit 1
+fi
+
+[[ -f "$1" ]] || exit 1
+sed -n '/^{{{ '"$2"'$/,/^}}}$/p' "$1" | sed '1d; $d'
