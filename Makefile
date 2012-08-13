@@ -18,7 +18,8 @@ man1dir = $(mandir)/man1
 .PHONY: install
 .PHONY: installdirs
 
-all: pdfpres/pdfpres showpdf/showpdf slidenotes/slidenotes stopclock/stopclock
+all: prescontrol/prescontrol showpdf/showpdf slidenotes/slidenotes \
+	stopclock/stopclock
 
 showpdf/showpdf: showpdf/showpdf.c showpdf/showpdf.h
 	$(CC) -Wall -Wextra $(CFLAGS) \
@@ -35,7 +36,7 @@ clean:
 	rm -f stopclock/stopclock
 
 install: all installdirs
-	$(INSTALL_PROGRAM) pdfpres/pdfpres $(DESTDIR)$(bindir)/pdfpres
+	$(INSTALL_PROGRAM) prescontrol/prescontrol $(DESTDIR)$(bindir)/prescontrol
 	$(INSTALL_PROGRAM) showpdf/showpdf $(DESTDIR)$(bindir)/showpdf
 	$(INSTALL_PROGRAM) slidenotes/slidenotes $(DESTDIR)$(bindir)/slidenotes
 	$(INSTALL_PROGRAM) stopclock/stopclock $(DESTDIR)$(bindir)/stopclock
