@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Enumerate all window IDs.
+ids=$(wmctrl -l | awk '{ print $1 }')
+
+# Get the screen's geometry.
+screen=$(./curscreen 2>/dev/null)
+wa_width=$(echo "$screen" | awk '{ print $1 }')
+wa_height=$(echo "$screen" | awk '{ print $2 }')
+wa_x=$(echo "$screen" | awk '{ print $3 }')
+wa_y=$(echo "$screen" | awk '{ print $4 }')
+
+for i in $ids
+do
+	# Find all showpdf preview windows.
+	property=$(xprop -id $i WM_CLASS)
+	instance=$(echo "$property" | cut -d\" -f2)
+	class=$(echo "$property" | cut -d\" -f4)
+	if [[ "$class" == "Showpdf" && "$instance" != "projector" ]]
+	then
+		min=${instance%%_*}
+		this=${instance##*_}
+		max=${instance%_*}
+		max=${max#*_}
+
+		# Okay, what do $min, $max and $this mean? Remember that each
+		# preview window has an offset, e.g. the "previous slide" has
+		# offset "-1", the "current slide" has offset "0" and so on.
+		# $min, $max and $this are offsets. $min is the minimum offset:
+		# Suppose you show the previous two slides, then $min is -2.
+		# Similarly, $max is the maximum offsets. If you show the next
+		# three slides, then $max is 3. $this is the offset for this
+		# particular window.
+
+		# Our job is now to calculate a geometry string for this window.
+		# The following code will tile all showpdf windows horizontally.
+		# main_row_relative = 0.75, that means the lower quarter of the
+		# screen will stay empty.
+
+		wmctrl -i -r $i -e $(awk -v min=$min -v max=$max -v this=$this \
+		                      -v wa_x=$wa_x -v wa_y=$wa_y \
+		                      -v wa_width=$wa_width \
+		                      -v wa_height=$wa_height \
+		'
+			BEGIN {
+				main_row_relative = 0.75
+
+				slots = max - min + 1
+				this_slot = this - min
+
+				x_offset_relative = this_slot / slots
+
+				x = wa_x + x_offset_relative * wa_width
+				y = wa_y
+				w = 1 / slots * wa_width
+				h = main_row_relative * wa_height
+
+				border = 5
+				x += border
+				y += border
+				w -= 2 * border
+				h -= 2 * border
+
+				print "0," int(x) "," int(y) "," int(w) "," int(h)
+			}
+		')
+	fi
+done

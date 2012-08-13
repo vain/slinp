@@ -1,0 +1,16 @@
+#!/usr/bin/env python2
+# coding: utf-8
+
+import gtk
+
+def curscreen():
+    dpy = gtk.gdk.display_get_default()
+    (scr, mx, my, _) = dpy.get_pointer()
+    mon = scr.get_monitor_at_point(mx, my)
+    return scr.get_monitor_geometry(mon)
+
+if __name__ == '__main__':
+    rect = curscreen()
+    print '%d %d %d %d' % (rect.width, rect.height, rect.x, rect.y)
+
+# vim: set ts=4 sw=4 et :

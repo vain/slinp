@@ -1,0 +1,8 @@
+If you're using a "primitive" window manager (one that can't be
+programmed) you may find it hard to use pdfpres.
+
+This directory cotnains an example of how to manage the showpdf windows
+with any EWMH compliant window manager.
+
+I do not intend to maintain these scripts or to add further features.
+The sole purpose is to give you an idea of what you could do.
