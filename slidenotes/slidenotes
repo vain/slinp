@@ -3,7 +3,7 @@
 if (( $# < 2 ))
 then
 	cat >&2 <<-EOM
-	Usage: $0 <path to notes> <slidenum>"
+	Usage: $0 <path to PDF file> <slidenum>"
 
 	Use the following format for your notes:
 
@@ -29,5 +29,5 @@ then
 	exit 1
 fi
 
-[[ -f "$1" ]] || exit 1
-sed -n '/^{{{ '"$2"'$/,/^}}}$/p' "$1" | sed '1d; $d'
+[[ -f "$1.notes" ]] || exit 1
+sed -n '/^{{{ '"$2"'$/,/^}}}$/p' "$1.notes" | sed '1d; $d'

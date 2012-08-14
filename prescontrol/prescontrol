@@ -64,7 +64,7 @@ class Pdfpres(object):
         """Run "slidenotes" to get the notes for the current slide."""
         p = subprocess.Popen([
                                   'slidenotes',
-                                  '{0}.notes'.format(self.path),
+                                  self.path,
                                   '{0}'.format(self.page)
                              ],
                              stdout=subprocess.PIPE)
