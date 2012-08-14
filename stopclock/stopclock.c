@@ -43,12 +43,12 @@ static void update_clock(struct application_info *app)
 	tmp = localtime(&t);
 	if (tmp == NULL)
 	{
-		perror("localtime");
+		perror("update_clock: localtime");
 		return;
 	}
 	if (strftime(fmt, sizeof(fmt), "%R", tmp) == 0)
 	{
-		fprintf(stderr, "strftime failed: 0\n");
+		fprintf(stderr, "update_clock: strftime failed: 0\n");
 		return;
 	}
 	gtk_label_set_text(GTK_LABEL(app->gui.clock), fmt);
