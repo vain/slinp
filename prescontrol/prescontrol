@@ -153,11 +153,14 @@ class Pdfpres(object):
                 return
 
 
-def application(window, path):
-    """Fire up the applications."""
-    p = Pdfpres(window, path)
+def application(window, argv):
+    """Fire up the applications. Use "argv" to customize the preview windows."""
+    p = Pdfpres(window, argv[0])
     p.read_pdf_meta()
-    p.launch_preview_range(-1, 1)
+    if len(argv) == 1:
+        p.launch_preview_range(-1, 1)
+    else:
+        p.launch_preview_range(int(argv[1]), int(argv[2]))
     p.launch_projector()
     p.launch_stopclock()
     p.navigate_current()
@@ -166,7 +169,7 @@ def application(window, path):
 
 if __name__ == '__main__':
     try:
-        curses.wrapper(application, sys.argv[1])
+        curses.wrapper(application, sys.argv[1:])
     except KeyboardInterrupt:
         pass
 
