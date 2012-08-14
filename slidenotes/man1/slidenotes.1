@@ -1,0 +1,60 @@
+.TH SLIDENOTES 1 "August 2012" "ppres" "PDF presentation tool chest"
+.SH NAME
+slidenotes \- Retrieve notes for a specific slide
+.SH SYNOPSIS
+\fBslidenotes\fP \fIPDFFILE\fP \fIPAGENUMBER\fP
+.SH DESCRIPTION
+\fBslidenotes\fP is given the path to a PDF file and a slide number. It
+then must print the notes for this slide on \fBstdout\fP.
+.P
+\fBslidenotes\fP does not read anything directly from \fIPDFFILE\fP but
+looks for a file called \fIPDFFILE.notes\fP. That file is supposed to
+contain your notes. It must follow the simple file format described
+below.
+.P
+If \fIPDFFILE.notes\fP does not exist or if there are no notes for the
+given page number, then \fBslidenotes\fP prints nothing. Thus, it's safe
+to call \fBslidenotes\fP for any filename and any page number.
+.P
+\fBslidenotes\fP is part of \fBppres\fP(1).
+.SH "FILE FORMAT"
+Here's an example of how your notes must look like:
+.P
+\f(CW
+.nf
+{{{ 1
+Notes for slide number 1.
+}}}
+
+{{{ 10
+Things to mention on slide number 10.
+
+Whatever.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae
+tellus id purus consectetur sollicitudin. Suspendisse potenti.
+Pellentesque habitant morbi tristique senectus et netus et malesuada
+fames ac turpis egestas. Maecenas mollis venenatis arcu eu elementum.
+Aenean eu leo nec massa feugiat lacinia. Fusce elementum euismod odio,
+quis bibendum ligula porttitor vitae.
+}}}
+.fi
+\fP
+.P
+A section starts with \fB{{{\fP, followed by one space character and the
+page number. A section is ended by a single \fB}}}\fP (no whitespace
+allowed). \fBslidenotes\fP prints anything between those two markers as
+is. In particular, line breaks are retained.
+.P
+Note that this format is designed to make use of Vim folding.
+.SH BUGS
+Currently, no bugs are known. If you find one, we invite you to report
+it at the GitHub Issue tracker (http://github.com/vain/ppres/issues).
+.SH LICENSE
+The \fBppres\fP tool chest is released as \(lqPIZZA-WARE\(rq. See the
+accompanying \fILICENSE\fP file.
+.SH AUTHORS
+The \fBppres\fP tool chest and this man page were written by Peter
+Hofmann.
+.SH "SEE ALSO"
+.BR ppres (1).

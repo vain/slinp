@@ -1,4 +1,4 @@
-ppres -- A PDF presentation toolchest.
+ppres -- A PDF presentation tool chest.
 
 [ppres project page](http://www.uninformativ.de/projects/?q=ppres) (german)
 
@@ -20,7 +20,7 @@ simply don't have the resources to do so. The branches "master" (Gtk2
 version) and "gtk3" will freeze. Feel free to fork the old program if
 you want to keep it alive.
 
-The new ppres is a minimalistic KISS toolchest that follows the Unix
+The new ppres is a minimalistic KISS tool chest that follows the Unix
 philosophy. The main design goal is to keep it as simple and as small as
 possible. This means it won't be a "typical" GUI application that just
 "does everything". I'll only implement features that I *really* need.
@@ -29,7 +29,7 @@ possible. This means it won't be a "typical" GUI application that just
 New Architecture
 ================
 
-ppres is a toolchest that comprises several individual programs.
+ppres is a tool chest that comprises several individual programs.
 
 One of them is showpdf. This tool's job is to display one page of one
 PDF file in one window. It reads simple commands on STDIN to navigate in
@@ -47,7 +47,8 @@ shows a clock and a stopwatch. Just like showpdf, stopwatch reads
 commands from STDIN (start, pause, reset) and is controlled by
 prescontrol.
 
-To sum it up, we get something like this:
+To sum it up, we get something like this (this sketch is not necessarily
+updated to reflect recent changes -- it's just an examply anyway):
 
 
 	+---------------+ +--------------+ +--------------+   +-------------+
@@ -109,3 +110,24 @@ Downsides?
 
 To sum it up once more: Occasional users will hate ppres, powerusers
 will like it (at least more than pdfpres).
+
+
+Dependencies and Building
+=========================
+
+You should install the most recent version of all those tools and
+libraries.
+
+* prescontrol: Requires Python 3.2 and pdfinfo from the poppler package.
+* showpdf: Requires gtk3 and poppler-glib.
+* stopclock: Requires gtk3.
+* slidenotes: Requires GNU Bash and GNU sed.
+
+To build it, do:
+
+	$ cd /path/to/sources
+	$ make
+
+To install it:
+
+	$ make DESTDIR=/foo prefix=/bar install

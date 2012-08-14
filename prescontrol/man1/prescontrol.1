@@ -1,0 +1,133 @@
+.TH PRESCONTROL 1 "August 2012" "ppres" "PDF presentation tool chest"
+.SH NAME
+prescontrol \- Do a presentation using the ppres tool chest
+.SH SYNOPSIS
+\fBprescontrol\fP \fIPDFFILE\fP [\fIMINOFF\fP \fIMAXOFF\fP]
+.SH DESCRIPTION
+\fBprescontrol\fP is the \(lqmain\(rq component of \fBppres\fP(1) which
+glues all the tools together. It is, however, just an example of what
+you could do with \fBppres\fP. Feel free to ditch \fBprescontrol\fP (or
+any of the other tools) and implement them any way you like.
+.P
+\fBprescontrol\fP is a terminal application and thus requires a terminal
+attached to it. It will then present you a very minimalistic
+\fBncurses\fP(3) TUI showing the current slide number and any notes for
+this slide. Use the key bindings as described below. When you quit
+\fBprescontrol\fP, all the other tools will be quit as well.
+.SH OPTIONS
+The term \(lqoffset\(rq means an offset relative to the current slide.
+So \(lqoffset -1\(rq means the previous slide and \(lqoffset 2\(rq means
+the slide after the next slide.
+.P
+By default, \fIMINOFF\fP is \fB-1\fP and \fIMAXOFF\fP is \fB1\fP. This
+means that during the presentation you will see three windows: The
+previous slide, the current slide and the next slide. See \fBLAUNCHED
+TOOLS\fP below on how this is done.
+.P
+Another example: If you set \fIMINOFF\fP to \fB0\fP and \fIMAXOFF\fP to
+\fB2\fP, then you'll see the current slide and the next two slides.
+.SH "LAUNCHED TOOLS"
+Let's start with a sketch of the setup:
+.P
+\f(CW
+.nf
++---------------+ +--------------+ +--------------+   +-------------+
+|    showpdf    | |   showpdf    | |   showpdf    |   |   showpdf   |
+| (prev. slide) | | (cur. slide) | | (next slide) |   | (projector) |
++---------------+ +--------------+ +--------------+   +-------------+
+        ^                ^                ^                  ^
+        |                |                |                  |
+        |                +---+            |                  |
+        |                    |            |                  |
+        +------------------+ | +----------+                  |
+                           | | |                             |
+                           | | | +---------------------------+
+                           | | | |
+ +------------+        +-------------+        +-----------------+
+ | slidenotes | <----> | prescontrol | -----> |    stopclock    |
+ +------------+        +-------------+        | (timer + clock) |
+                          ^  |  ^             +-----------------+
+ +---------+              |  |  |
+ | pdfinfo | <------------+  |  |
+ +---------+                 |  |
+                             v  |
+                           ========
+                             USER
+                           ========
+.fi
+\fP
+.P
+\fBpdfinfo\fP(1) from the poppler package is called to retrieve the
+number of pages in your document. This will only be done once when
+\fBprescontrol\fP starts.
+.P
+Most importantly, \fBprescontrol\fP will launch several instances of
+\fBshowpdf\fP:
+.IP \(bu 4
+Some preview windows, by default showing the previous slide, the current
+slide and the next slide.
+.IP \(bu 4
+One window that shows the current slide. It is supposed to be moved to
+the projector.
+.P
+\fBprescontrol\fP gives your window manager some hints on those windows.
+All \fBshowpdf\fP windows will have a class name of \fBShowpdf\fP. Their
+instance names will be unique:
+.IP \(bu 4
+Preview windows' instance names are of the form \fIa_b_c\fP where
+\fIa\fP is the minimum offset, \fIb\fP the maximum offset and \fIc\fP
+the offset for this particular window. For example, if you tell
+\fBprescontrol\fP to show the previous slide and the following two
+slides, then the window showing the current slide will have an instance
+name of \fB-1_2_0\fP.
+.IP \(bu 4
+The projector window will have an instance name of \fBprojector\fP.
+.P
+You can use a tool like \fBxprop\fP(1) to examine these properties.
+.P
+\fBprescontrol\fP will run \fBslidenotes\fP and ask it if there are any
+notes for the current slide.
+.P
+Furthermore, \fBstopclock\fP will be launched and attached to
+\fBprescontrol\fP. Use the key bindings below to control the stopwatch.
+.P
+As you may have noticed, you will be lost if you're not using an
+intelligent window manager. The source tree of \fBppres\fP contains a
+directory called \fIlayout_example\fP: Have a look at the \fIREADME\fP
+in there if you're using a primitive WM. If you're using the Awesome WM,
+though, you can use my package \fBawesome-vain\fP
+(https://github.com/vain/awesome-vain). It contains a special layout
+that allows you to comfortably use \fBprescontrol\fP.
+.SH "KEY BINDINGS"
+.TP
+\fBj\fP or Space Bar
+Go to the next slide.
+.TP
+\fBk\fP
+Go to the previous slide.
+.TP
+\fBb\fP
+Blank the projector window. Press again to unblank it.
+.TP
+\fBa\fP
+Start or resume the timer.
+.TP
+\fBs\fP
+Pause the timer.
+.TP
+\fBd\fP
+Stop and reset the timer.
+.TP
+\fBq\fP
+Quit \fBprescontrol\fP.
+.SH BUGS
+Currently, no bugs are known. If you find one, we invite you to report
+it at the GitHub Issue tracker (http://github.com/vain/ppres/issues).
+.SH LICENSE
+The \fBppres\fP tool chest is released as \(lqPIZZA-WARE\(rq. See the
+accompanying \fILICENSE\fP file.
+.SH AUTHORS
+The \fBppres\fP tool chest and this man page were written by Peter
+Hofmann.
+.SH "SEE ALSO"
+.BR ppres (1).

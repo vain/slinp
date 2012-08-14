@@ -1,0 +1,44 @@
+.TH SHOWPDF 1 "August 2012" "ppres" "PDF presentation tool chest"
+.SH NAME
+showpdf \- Display a PDF file
+.SH SYNOPSIS
+\fBshowpdf\fP [\fIGTK-OPTIONS\fP] \fIPDFFILE\fP
+.SH DESCRIPTION
+\fBshowpdf\fP opens a single window and shows one page of a PDF file. It
+also reads plain text commands from \fBstdin\fP that allow you to
+navigate in that file.
+.P
+\fBshowpdf\fP is part of \fBppres\fP(1).
+.SH OPTIONS
+\fBshowpdf\fP itself only expects \fIPDFFILE\fP as a command line
+argument. It does, however, call \fBgtk_init()\fP, so all common Gtk
+options are supported as well. In particular, \fBgtk_init()\fP knows
+\fB\-\-class\fP and \fB\-\-name\fP:
+.TP
+\fB\-\-class\fP \fIname\fP
+Client class as used by the window manager.
+.TP
+\fB\-\-name\fP \fIname\fP
+Client instance name as used by the window manager.
+.P
+This gives you a great deal of control over \fBshowpdf\fP and allows you
+to use your window manager to organize \fBshowpdf\fP windows.
+.SH "COMMANDS ON STDIN"
+\fBshowpdf\fP has no widgets for user interaction. The only way to
+control it is to write commands on \fBstdin\fP, one command per line
+(that is, don't forget to write a terminating newline).
+.TP
+\fBgo_page\fP \fIPAGENUMBER\fP
+Issues \fBshowpdf\fP to navigate to another page. The first page in the
+document is \fB1\fP.
+.SH BUGS
+Currently, no bugs are known. If you find one, we invite you to report
+it at the GitHub Issue tracker (http://github.com/vain/ppres/issues).
+.SH LICENSE
+The \fBppres\fP tool chest is released as \(lqPIZZA-WARE\(rq. See the
+accompanying \fILICENSE\fP file.
+.SH AUTHORS
+The \fBppres\fP tool chest and this man page were written by Peter
+Hofmann.
+.SH "SEE ALSO"
+.BR ppres (1).

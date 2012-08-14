@@ -1,0 +1,48 @@
+.TH STOPCLOCK 1 "August 2012" "ppres" "PDF presentation tool chest"
+.SH NAME
+stopclock \- Stopwatch and clock
+.SH SYNOPSIS
+\fBstopclock\fP [\fIGTK-OPTIONS\fP]
+.SH DESCRIPTION
+\fBstopclock\fP opens a window and shows a clock and a stopwatch. The
+stopwatch can be controlled by sending commands on \fBstdin\fP.
+.P
+\fBstopclock\fP is part of \fBppres\fP(1).
+.SH OPTIONS
+\fBstopclock\fP itself doesn't know any command line arguments. It does,
+however, call \fBgtk_init()\fP, so all common Gtk options are supported
+as well. In particular, \fBgtk_init()\fP knows \fB\-\-class\fP and
+\fB\-\-name\fP:
+.TP
+\fB\-\-class\fP \fIname\fP
+Client class as used by the window manager.
+.TP
+\fB\-\-name\fP \fIname\fP
+Client instance name as used by the window manager.
+.P
+This gives you a great deal of control over \fBstopclock\fP and allows
+you to use your window manager to organize \fBstopclock\fP windows.
+.SH "COMMANDS ON STDIN"
+\fBstopclock\fP has no widgets for user interaction. The only way to
+control it is to write commands on \fBstdin\fP, one command per line
+(that is, don't forget to write a terminating newline).
+.TP
+\fBstart\fP
+Starts the timer or resumes a paused timer.
+.TP
+\fBpause\fP
+Pauses a running timer.
+.TP
+\fBreset\fP
+Stops a running or paused timer and resets it to zero.
+.SH BUGS
+Currently, no bugs are known. If you find one, we invite you to report
+it at the GitHub Issue tracker (http://github.com/vain/ppres/issues).
+.SH LICENSE
+The \fBppres\fP tool chest is released as \(lqPIZZA-WARE\(rq. See the
+accompanying \fILICENSE\fP file.
+.SH AUTHORS
+The \fBppres\fP tool chest and this man page were written by Peter
+Hofmann.
+.SH "SEE ALSO"
+.BR ppres (1).

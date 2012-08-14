@@ -1,0 +1,53 @@
+.TH PPRES 1 "August 2012" "ppres" "PDF presentation tool chest"
+.SH NAME
+ppres \- PDF presentation tool chest
+.SH SYNOPSIS
+Overview of ppres.
+.SH DESCRIPTION
+\fBppres\fP is a tool chest for presenting PDF slides. As such, it
+comprises several separate tools. This man page gives you an overview of
+what those tools do. Refer to the man pages of the individual tools for
+detailed information.
+.P
+If you want a quick start, head over to the man page of
+\fBprescontrol\fP(1).
+.P
+\fBppres\fP is supposed to follow the Unix philosophy and to remain as
+simple as possible (from a technical point of view). Each component
+should be an almost trivial program that is very easy to maintain. The
+tools are meant to work together \(em they are not standalone programs.
+.P
+Only Arch Linux is officially supported as a platform right now.
+\fBppres\fP may or may not work on other operating systems.
+.SH TOOLS
+The following tools are part of \fBppres\fP:
+.TP
+\fBshowpdf\fP(1)
+Displays one slide at a time of one PDF file. Reads plain text commands
+from \fBstdin\fP that allow you to navigate in that file.
+.TP
+\fBslidenotes\fP(1)
+Retrieves notes for a specific slide.
+.TP
+\fBstopclock\fP(1)
+Stopwatch and clock, combined in a simple application. Reads plain text
+commands from \fBstdin\fP to control the stopwatch (start, pause,
+reset).
+.TP
+\fBprescontrol\fP(1)
+Glues all the tools together. This is what the author uses to actually
+do the presentation. It's stripped down to the features that he needs.
+.SH BUGS
+Currently, no bugs are known. If you find one, we invite you to report
+it at the GitHub Issue tracker (http://github.com/vain/ppres/issues).
+.SH LICENSE
+The \fBppres\fP tool chest is released as \(lqPIZZA-WARE\(rq. See the
+accompanying \fILICENSE\fP file.
+.SH AUTHORS
+The \fBppres\fP tool chest and this man page were written by Peter
+Hofmann.
+.SH "SEE ALSO"
+.BR prescontrol (1),
+.BR showpdf (1),
+.BR slidenotes (1),
+.BR stopclock (1).
