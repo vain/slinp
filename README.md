@@ -5,25 +5,22 @@ ppres -- A PDF presentation tool chest.
 Released as PIZZA-WARE. See LICENSE.
 
 
-History and the death of pdfpres
-================================
+What is ppres?
+==============
 
-Back in 2009, I needed a program to display presentations in a
-comfortable way. This is why and when pdfpres was born. See also:
+Many people use the [LaTeX Beamer
+class](https://bitbucket.org/rivanvx/beamer/wiki/Home) to create
+presentations. What's missing is a tool to comfortably display those
+presentations. ppres provides a framework to do this.
 
-* [pdfpres on GitHub](https://github.com/vain/pdfpres)
-* [pdfpres project page](http://www.uninformativ.de/projects/?q=pdfpres) (german)
-
-pdfpres grew a lot over time. Featuritis. I didn't realize this until it
-was too late. Sorry. I can no longer maintain the old code because I
-simply don't have the resources to do so. The branches "master" (Gtk2
-version) and "gtk3" will freeze. Feel free to fork the old program if
-you want to keep it alive.
-
-The new ppres is a minimalistic KISS tool chest that follows the Unix
+ppres is a minimalistic KISS tool chest that follows the Unix
 philosophy. The main design goal is to keep it as simple and as small as
-possible. This means it won't be a "typical" GUI application that just
-"does everything". I'll only implement features that I *really* need.
+possible. This means it is not a "typical" GUI application that just
+"does everything". ppres gives you some tools but it's your job to
+connect them. An exemplary implementation (prescontrol) is shipped,
+though.
+
+ppres supersedes [pdfpres](https://github.com/vain/pdfPres).
 
 
 New Architecture
@@ -41,15 +38,16 @@ Show next slide, show previous slide and so on.
 
 prescontrol and showpdf implement the core functionality of ppres.
 
-Additional programs may be plugged into prescontrol. For now, there's
-two of them: slidenotes retrieves notes for a specific slide. stopclock
-shows a clock and a stopwatch. Just like showpdf, stopwatch reads
-commands from STDIN (start, pause, reset) and is controlled by
-prescontrol.
+Additional programs are plugged into prescontrol. For now, there's three
+of them: slidenotes retrieves notes for a specific slide. stopclock
+shows a clock and a stopwatch. Just like showpdf, stopclock reads
+commands from STDIN (like start, pause, reset) and is controlled by
+prescontrol. pdfinfo from the poppler package is used to read some
+metadata of the PDF file.
 
 To sum it up, we get something like this (this sketch is not necessarily
-updated to reflect recent changes -- it's just an examply anyway):
-
+updated to reflect recent changes -- refer to the man pages for
+up-to-date information):
 
 	+---------------+ +--------------+ +--------------+   +-------------+
 	|    showpdf    | |   showpdf    | |   showpdf    |   |   showpdf   |
@@ -66,15 +64,17 @@ updated to reflect recent changes -- it's just an examply anyway):
 	 +------------+        +-------------+        +-----------------+
 	 | slidenotes | <----> | prescontrol | -----> |    stopclock    |
 	 +------------+        +-------------+        | (timer + clock) |
-	                             |  ^             +-----------------+
-	                             |  |
-	                             |  |
-	                             |  |
+	                          ^  |  ^             +-----------------+
+	 +---------+              |  |  |
+	 | pdfinfo | <------------+  |  |
+	 +---------+                 |  |
 	                             v  |
 	                           ========
 	                             USER
 	                           ========
 
+Again, this is just an example. It's how I want my presentation program
+to behave. You are free to do things differently!
 
 Why is this better than the old pdfpres?
 
@@ -88,25 +88,23 @@ Why is this better than the old pdfpres?
   of time.
 * It's a lot easier to customize and extend. Components are exchangeable
   -- in theory, you could ditch showpdf and use Xpdf instead. Users can
-  even re-implement whole components if they don't like mine.
+  also re-implement whole components if they don't like mine.
 * Some components (such as showpdf) may turn out to be universal
   components that can be used outside of ppres.
 * Intelligent window managers can take care of arranging all the
   windows. This is a lot more flexible than the old layout (which was
   fixed) and saves a lot of code.
 
-
 Downsides?
 
 * ppres no longer arranges the windows for you. Well, it could do so,
   but I don't intend to implement that as a part of ppres. It's your
-  window manager's job now. As part of awesome-vain, I provide a special
-  layout for the Awesome Window Manager.
-* It may get harder for other users to work with ppres. Sorry but I
-  simply can not maintain a full blown GUI application (as pointed out
-  above). A comparison: The old pdfpres was Firefox, the new ppres is
-  uzbl. Something like that.
-
+  window manager's job now. As part of
+  [awesome-vain](https://github.com/vain/awesome-vain), I provide a
+  special layout for the Awesome Window Manager.
+* It may get harder for other users to work with ppres. A comparison:
+  The old pdfpres was Firefox, the new ppres is uzbl. Something like
+  that.
 
 To sum it up once more: Occasional users will hate ppres, powerusers
 will like it (at least more than pdfpres).
@@ -131,3 +129,5 @@ To build it, do:
 To install it:
 
 	$ make DESTDIR=/foo prefix=/bar install
+
+Arch Linux is the only supported platform.
