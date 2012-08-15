@@ -20,7 +20,8 @@ possible. This means it is not a "typical" GUI application that just
 connect them. An exemplary implementation (prescontrol) is shipped,
 though.
 
-ppres supersedes [pdfpres](https://github.com/vain/pdfPres).
+ppres is the "little brother" of
+[pdfpres](https://github.com/vain/pdfPres).
 
 
 New Architecture
@@ -83,7 +84,7 @@ Why is this better than the old pdfpres?
 * Each component is one process. This means, we automatically benefit
   from multiprocessor systems (they are ubiquitous today) without having
   to worry about multithreading!
-* All components can be implemented in different programming languages.
+* Each component can be implemented in a different programming language.
   There's no need to implement everything in C. This saves me a hell lot
   of time.
 * It's a lot easier to customize and extend. Components are exchangeable
