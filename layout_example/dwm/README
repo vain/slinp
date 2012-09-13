@@ -1,0 +1,20 @@
+The layout is as follows:
+
+	+----------+  +----------+  +---------+
+	| Previous |  | Current  |  | Next    |
+	|    slide |  |    slide |  |   slide |
+	+----------+  +----------+  +---------+
+	+-------+ +-------+ +-------+ +-------+
+	| other | | other | | other | | other |
+	+-------+ +-------+ +-------+ +-------+
+
+There's a main column at the top and a slave column at the bottom.
+ppres windows have unique class and instance names and they're sorted
+according to them. ppres also has a "projector" window which is set to
+floating mode so you can easily move it around.
+
+All other windows are tiled in the slave column.
+
+I can't guarantee that this patch applies cleanly to any specific
+version of dwm. But, as you can see, all it does is add another
+function. You should be able to deal with this if you're using dwm.

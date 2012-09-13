@@ -1,0 +1,22 @@
+The layout is as follows:
+
+	+----------+  +----------+  +---------+
+	| Previous |  | Current  |  | Next    |
+	|    slide |  |    slide |  |   slide |
+	+----------+  +----------+  +---------+
+	+-------+ +-------+ +-------+ +-------+
+	| other | | other | | other | | other |
+	+-------+ +-------+ +-------+ +-------+
+
+There's a main column at the top and a slave column at the bottom.
+ppres windows have unique class and instance names and they're sorted
+according to them. ppres also has a "projector" window which is set to
+floating mode so you can easily move it around.
+
+All other windows are tiled in the slave column.
+
+You could use that layout like this:
+
+	awful.layout.set(vain.layout.ppres, tags[1][8])
+
+Or just add it to your `layouts` table.

@@ -100,9 +100,9 @@ Downsides?
 
 * ppres no longer arranges the windows for you. Well, it could do so,
   but I don't intend to implement that as a part of ppres. It's your
-  window manager's job now. As part of
-  [awesome-vain](https://github.com/vain/awesome-vain), I provide a
-  special layout for the Awesome Window Manager.
+  window manager's job now. See the directory `layout_example` for some
+  examples (`wmctrl`, a layout for the Awesome WM and an exemplary patch
+  for dwm -- those are just examples, though, and not maintained).
 * It may get harder for other users to work with ppres. A comparison:
   The old pdfpres was Firefox, the new ppres is uzbl. Something like
   that.

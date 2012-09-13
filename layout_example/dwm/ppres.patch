@@ -1,0 +1,106 @@
+commit e43ed9316e6d961a1536e7c5be5dde88939caf3b
+Author: Peter Hofmann <scm@uninformativ.de>
+Date:   Thu Sep 13 14:37:41 2012 +0200
+
+    Ported the ppres-layout from awesome.
+
+diff --git a/dwm.c b/dwm.c
+index 9a783dc..ab20507 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -206,6 +206,7 @@ static void motionnotify(XEvent *e);
+ static void movemouse(const Arg *arg);
+ static Client *nexttiled(Client *c);
+ static void pop(Client *);
++static void ppres(Monitor *);
+ static void propertynotify(XEvent *e);
+ static void quit(const Arg *arg);
+ static void restart(const Arg *arg);
+@@ -1315,6 +1316,87 @@ pop(Client *c) {
+ }
+ 
+ void
++ppres(Monitor *m) {
++	Client *c;
++	XClassHint ch = { NULL, NULL };
++	const char *class, *instance;
++	char *cmin, *cmax, *cthis;
++	int imin, imax, ithis;
++	int i, slaves = 0, slots, thisslot;
++	double xoffrel, mainrel = 0.5;
++
++	for(c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
++		XGetClassHint(dpy, c->win, &ch);
++		class    = ch.res_class ? ch.res_class : broken;
++		instance = ch.res_name  ? ch.res_name  : broken;
++
++		if(strcmp(class, "Showpdf") == 0) {
++			if(strcmp(instance, "projector") == 0) {
++				c->isfloating = 1;
++			}
++			else {
++				cmin = strdup(instance);
++				cmax = strchr(cmin, '_');
++				cthis = strrchr(cmin, '_');
++				*cmax = 0;
++				*cthis = 0;
++				cmax++;
++				cthis++;
++				imin = atoi(cmin);
++				imax = atoi(cmax);
++				ithis = atoi(cthis);
++				free(cmin);
++
++				slots = imax - imin + 1;
++				thisslot = ithis - imin;
++
++				xoffrel = thisslot / (double)slots;
++
++				resize(c,
++				       m->wx + xoffrel * m->ww,
++				       m->wy,
++				       1.0 / slots * m->ww - 2 * c->bw,
++				       mainrel * m->wh - 2 * c->bw,
++				       False);
++			}
++		}
++		else
++			slaves++;
++
++		if(ch.res_class)
++			XFree(ch.res_class);
++		if(ch.res_name)
++			XFree(ch.res_name);
++		ch.res_class = NULL;
++		ch.res_name = NULL;
++	}
++
++	i = 0;
++	for(c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
++		XGetClassHint(dpy, c->win, &ch);
++		class = ch.res_class ? ch.res_class : broken;
++
++		if(strcmp(class, "Showpdf") != 0)
++		{
++			resize(c,
++			       m->wx + (i / (double)slaves) * m->ww,
++			       m->wy + mainrel * m->wh,
++			       1.0 / slaves * m->ww - 2 * c->bw,
++			       m->wh - mainrel * m->wh - 2 * c->bw,
++			       False);
++			i++;
++		}
++
++		if(ch.res_class)
++			XFree(ch.res_class);
++		if(ch.res_name)
++			XFree(ch.res_name);
++		ch.res_class = NULL;
++		ch.res_name = NULL;
++	}
++}
++
++void
+ propertynotify(XEvent *e) {
+ 	Client *c;
+ 	Window trans;
