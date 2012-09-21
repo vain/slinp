@@ -20,8 +20,17 @@ possible. This means it is not a "typical" GUI application that just
 connect them. An exemplary implementation (prescontrol) is shipped,
 though.
 
-slinp is the "little brother" of
+slinp is the "little brother" of and successor to
 [pdfpres](https://github.com/vain/pdfPres).
+
+
+What does "slinp" mean?
+=======================
+
+In the tradition of recursive acronyms: *sl*inp *i*s *n*ot *p*dfpres.
+Or, if you like: *sli*ck and *n*eat *p*resentations.
+
+Pronounce it "slin-p" or "slinpy".
 
 
 New Architecture
