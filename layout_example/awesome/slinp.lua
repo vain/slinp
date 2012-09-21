@@ -2,8 +2,8 @@ local tonumber = tonumber
 local awful = awful
 local table = table
 
-module("vain.layout.ppres")
-name = "ppres"
+module("vain.layout.slinp")
+name = "slinp"
 
 function arrange(p)
     local wa = p.workarea

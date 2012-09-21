@@ -1,33 +1,33 @@
-ppres -- A PDF presentation tool chest.
+slinp -- A PDF presentation tool chest.
 
-[ppres project page](http://www.uninformativ.de/projects/?q=ppres) (german)
+[slinp project page](http://www.uninformativ.de/projects/?q=slinp) (german)
 
 Released as PIZZA-WARE. See LICENSE.
 
 
-What is ppres?
+What is slinp?
 ==============
 
 Many people use the [LaTeX Beamer
 class](https://bitbucket.org/rivanvx/beamer/wiki/Home) to create
 presentations. What's missing is a tool to comfortably display those
-presentations. ppres provides a framework to do this.
+presentations. slinp provides a framework to do this.
 
-ppres is a minimalistic KISS tool chest that follows the Unix
+slinp is a minimalistic KISS tool chest that follows the Unix
 philosophy. The main design goal is to keep it as simple and as small as
 possible. This means it is not a "typical" GUI application that just
-"does everything". ppres gives you some tools but it's your job to
+"does everything". slinp gives you some tools but it's your job to
 connect them. An exemplary implementation (prescontrol) is shipped,
 though.
 
-ppres is the "little brother" of
+slinp is the "little brother" of
 [pdfpres](https://github.com/vain/pdfPres).
 
 
 New Architecture
 ================
 
-ppres is a tool chest that comprises several individual programs.
+slinp is a tool chest that comprises several individual programs.
 
 One of them is showpdf. This tool's job is to display one page of one
 PDF file in one window. It reads simple commands on STDIN to navigate in
@@ -37,7 +37,7 @@ A control programm called prescontrol will act as the user interface. It
 starts several instances of showpdf. prescontrol accepts your commands:
 Show next slide, show previous slide and so on.
 
-prescontrol and showpdf implement the core functionality of ppres.
+prescontrol and showpdf implement the core functionality of slinp.
 
 Additional programs are plugged into prescontrol. For now, there's three
 of them: slidenotes retrieves notes for a specific slide. stopclock
@@ -91,23 +91,23 @@ Why is this better than the old pdfpres?
   -- in theory, you could ditch showpdf and use Xpdf instead. Users can
   also re-implement whole components if they don't like mine.
 * Some components (such as showpdf) may turn out to be universal
-  components that can be used outside of ppres.
+  components that can be used outside of slinp.
 * Intelligent window managers can take care of arranging all the
   windows. This is a lot more flexible than the old layout (which was
   fixed) and saves a lot of code.
 
 Downsides?
 
-* ppres no longer arranges the windows for you. Well, it could do so,
-  but I don't intend to implement that as a part of ppres. It's your
+* slinp no longer arranges the windows for you. Well, it could do so,
+  but I don't intend to implement that as a part of slinp. It's your
   window manager's job now. See the directory `layout_example` for some
   examples (`wmctrl`, a layout for the Awesome WM and an exemplary patch
   for dwm -- those are just examples, though, and not maintained).
-* It may get harder for other users to work with ppres. A comparison:
-  The old pdfpres was Firefox, the new ppres is uzbl. Something like
+* It may get harder for other users to work with slinp. A comparison:
+  The old pdfpres was Firefox, the new slinp is uzbl. Something like
   that.
 
-To sum it up once more: Occasional users will hate ppres, powerusers
+To sum it up once more: Occasional users will hate slinp, powerusers
 will like it (at least more than pdfpres).
 
 

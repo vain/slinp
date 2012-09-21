@@ -2,7 +2,7 @@ commit e43ed9316e6d961a1536e7c5be5dde88939caf3b
 Author: Peter Hofmann <scm@uninformativ.de>
 Date:   Thu Sep 13 14:37:41 2012 +0200
 
-    Ported the ppres-layout from awesome.
+    Ported the slinp-layout from awesome.
 
 diff --git a/dwm.c b/dwm.c
 index 9a783dc..ab20507 100644
@@ -12,7 +12,7 @@ index 9a783dc..ab20507 100644
  static void movemouse(const Arg *arg);
  static Client *nexttiled(Client *c);
  static void pop(Client *);
-+static void ppres(Monitor *);
++static void slinp(Monitor *);
  static void propertynotify(XEvent *e);
  static void quit(const Arg *arg);
  static void restart(const Arg *arg);
@@ -20,7 +20,7 @@ index 9a783dc..ab20507 100644
  }
  
  void
-+ppres(Monitor *m) {
++slinp(Monitor *m) {
 +	Client *c;
 +	XClassHint ch = { NULL, NULL };
 +	const char *class, *instance;

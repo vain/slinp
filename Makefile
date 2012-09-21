@@ -44,7 +44,7 @@ install: all installdirs
 	$(INSTALL_DATA) showpdf/man1/showpdf.1 $(DESTDIR)$(man1dir)/showpdf.1
 	$(INSTALL_DATA) slidenotes/man1/slidenotes.1 $(DESTDIR)$(man1dir)/slidenotes.1
 	$(INSTALL_DATA) stopclock/man1/stopclock.1 $(DESTDIR)$(man1dir)/stopclock.1
-	$(INSTALL_DATA) man1/ppres.1 $(DESTDIR)$(man1dir)/ppres.1
+	$(INSTALL_DATA) man1/slinp.1 $(DESTDIR)$(man1dir)/slinp.1
 
 installdirs:
 	@# We only support GNU right now, but FreeBSD and OpenBSD understand

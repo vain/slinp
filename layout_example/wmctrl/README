@@ -1,5 +1,5 @@
 If you're using a "primitive" window manager (one that can't be
-programmed) you may find it (very) hard to use ppres.
+programmed) you may find it (very) hard to use slinp.
 
 This directory cotnains an example of how to manage the showpdf windows
 with any EWMH compliant window manager.
