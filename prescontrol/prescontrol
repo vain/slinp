@@ -4,7 +4,7 @@ import subprocess
 import curses
 import sys
 
-class Pdfpres(object):
+class Presenter(object):
     def __init__(self, window, path):
         self.window = window
         self.path = path
@@ -155,7 +155,7 @@ class Pdfpres(object):
 
 def application(window, argv):
     """Fire up the applications. Use "argv" to customize the preview windows."""
-    p = Pdfpres(window, argv[0])
+    p = Presenter(window, argv[0])
     p.read_pdf_meta()
     if len(argv) == 1:
         p.launch_preview_range(-1, 1)
