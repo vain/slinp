@@ -19,7 +19,11 @@ class Presenter(object):
         self.key_bindings = {
             'j': self.next_slide,
             ' ': self.next_slide,
+            'KEY_DOWN': self.next_slide,
+            'KEY_RIGHT': self.next_slide,
             'k': self.prev_slide,
+            'KEY_UP': self.prev_slide,
+            'KEY_LEFT': self.prev_slide,
             'b': self.blank,
             'a': self.stopclock_start,
             's': self.stopclock_pause,
