@@ -3,6 +3,8 @@
 import subprocess
 import curses
 import sys
+from gi.repository import Poppler
+
 
 class Presenter(object):
     def __init__(self, window, path):
@@ -17,18 +19,13 @@ class Presenter(object):
         self.stopclock = None
 
     def read_pdf_meta(self):
-        """Read PDF metadata using "pdfinfo".
+        """Read PDF metadata using gobject introspection.
 
         Currently, this only determines how many pages there are in the PDF
         file.
         """
-        p = subprocess.Popen(['pdfinfo', self.path], stdout=subprocess.PIPE)
-        (stdoutdata, _) = p.communicate()
-        lines = str(stdoutdata, 'UTF-8').split('\n')
-        for i in lines:
-            fields = [f.strip() for f in i.split(':')]
-            if fields[0] == 'Pages':
-                self.num_pages = int(fields[1])
+        doc = Poppler.Document.new_from_file("file://" + self.path, None)
+        self.num_pages = doc.get_n_pages()
 
     def launch_preview_range(self, a, b):
         """Launch all instances of "showpdf" (preview windows)."""
