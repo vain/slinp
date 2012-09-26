@@ -4,6 +4,7 @@ import subprocess
 import curses
 import sys
 from gi.repository import Poppler
+from os.path import abspath
 
 
 class Presenter(object):
@@ -24,7 +25,7 @@ class Presenter(object):
         Currently, this only determines how many pages there are in the PDF
         file.
         """
-        doc = Poppler.Document.new_from_file("file://" + self.path, None)
+        doc = Poppler.Document.new_from_file("file://" + abspath(self.path), None)
         self.num_pages = doc.get_n_pages()
 
     def launch_preview_range(self, a, b):
