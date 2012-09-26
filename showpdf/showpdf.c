@@ -1,71 +1,37 @@
 #include "showpdf.h"
 
-static gboolean read_file(char *path, char **data_buf,
-                          size_t *data_size)
-{
-	struct stat stat_buf;
-	FILE *fp = NULL;
-
-	/* stat() the file to read it in one go. */
-	if (stat(path, &stat_buf) == -1)
-	{
-		perror("read_file: Could not stat file");
-		return FALSE;
-	}
-
-	*data_buf = (char *)malloc(stat_buf.st_size);
-	if (*data_buf == NULL)
-	{
-		perror("read_file: Not enough memory");
-		return FALSE;
-	}
-
-	fp = fopen(path, "rb");
-	if (fp == NULL)
-	{
-		perror("read_file: Could not open file");
-		free(*data_buf);
-		return FALSE;
-	}
-
-	/* Read 1 element of size "stat_buf.st_size". fread() returns the
-	 * number of items successfully read. Thus, a return value of "1"
-	 * means "success" and anything else is an error. */
-	if (fread(*data_buf, stat_buf.st_size, 1, fp) != 1)
-	{
-		fprintf(stderr, "read_file: Unexpected end of file.\n");
-		free(*data_buf);
-		fclose(fp);
-		return FALSE;
-	}
-
-	fclose(fp);
-	*data_size = stat_buf.st_size;
-	return TRUE;
-}
-
 static gboolean load_pdf(struct application_info *app, char *path)
 {
-	char *data = NULL;
-	size_t data_size = 0;
+	gchar *absolute, *uri;
 	GError *err = NULL;
 
-	if (!read_file(path, &data, &data_size))
+	/* Build a URI from the path name. */
+	if (g_path_is_absolute(path))
 	{
-		fprintf(stderr, "load_pdf: No PDF data present.\n");
-		return FALSE;
+		absolute = g_strdup(path);
+	}
+	else
+	{
+		gchar *dir = g_get_current_dir();
+		absolute = g_build_filename(dir, path, NULL);
+		g_free(dir);
 	}
 
-	/* Note: You must never ever free(data) if the following call
-	 * succeeded. Poppler expects the data to be valid all the time,
-	 * i.e. it doesn't copy it to its own memory or sth. like that. */
-	app->pdf.doc = poppler_document_new_from_data(data, data_size,
-	                                              NULL, &err);
+	uri = g_filename_to_uri(absolute, NULL, &err);
+	g_free(absolute);
+
+	if (uri == NULL)
+	{
+		printf("load_pdf: %s\n", err->message);
+		return 1;
+	}
+
+	/* Load the file via its URI. */
+	app->pdf.doc = poppler_document_new_from_file(uri, NULL, &err);
 	if (app->pdf.doc == NULL)
 	{
 		fprintf(stderr, "load_pdf: %s\n", err->message);
 		g_error_free(err);
-		free(data);
 		return FALSE;
 	}
 
@@ -73,7 +39,6 @@ static gboolean load_pdf(struct application_info *app, char *path)
 	if (app->pdf.num_pages <= 0)
 	{
 		fprintf(stderr, "load_pdf: PDF has <= 0 pages.\n");
-		free(data);
 		g_object_unref(app->pdf.doc);
 		return FALSE;
 	}
