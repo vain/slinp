@@ -134,17 +134,19 @@ class Presenter(object):
         self.stopclock.stdin.write(bytes('reset\n', 'UTF-8'))
 
     def end_children(self):
-        """Kill all instance of "showpdf" and "stopclock" that we know of."""
+        """Kill all instances of "showpdf" and "stopclock" that we know of."""
         self.projector.kill()
         for (p, _) in self.previews:
             p.kill()
         self.stopclock.kill()
 
     def shutdown(self):
+        """Kill all children and yourself."""
         self.end_children()
         sys.exit(0)
 
     def blank(self):
+        """Toggle blanking of the projector window."""
         self.projector_blank = not self.projector_blank
         self.navigate_current()
 
