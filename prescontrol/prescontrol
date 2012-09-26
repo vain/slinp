@@ -20,7 +20,7 @@ class Presenter(object):
             'j': self.next_slide,
             ' ': self.next_slide,
             'k': self.prev_slide,
-            'b': self.blank,
+            'b': self.toggle_blank,
             'a': self.stopclock_start,
             's': self.stopclock_pause,
             'd': self.stopclock_reset,
@@ -145,7 +145,7 @@ class Presenter(object):
         self.end_children()
         sys.exit(0)
 
-    def blank(self):
+    def toggle_blank(self):
         """Toggle blanking of the projector window."""
         self.projector_blank = not self.projector_blank
         self.navigate_current()
