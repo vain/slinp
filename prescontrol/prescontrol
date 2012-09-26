@@ -16,6 +16,17 @@ class Presenter(object):
         self.notes = []
         self.stopclock = None
 
+        self.key_bindings = {
+            'j': self.next_slide,
+            ' ': self.next_slide,
+            'k': self.prev_slide,
+            'b': self.blank,
+            'a': self.stopclock_start,
+            's': self.stopclock_pause,
+            'd': self.stopclock_reset,
+            'q': self.shutdown,
+        }
+
     def read_pdf_meta(self):
         """Read PDF metadata using "pdfinfo".
 
@@ -129,28 +140,21 @@ class Presenter(object):
             p.kill()
         self.stopclock.kill()
 
+    def shutdown(self):
+        self.end_children()
+        sys.exit(0)
+
+    def blank(self):
+        self.projector_blank = not self.projector_blank
+        self.navigate_current()
+
     def interaction_loop(self):
         """Wait for user commands and act upon them."""
         while True:
             self.show_current_info()
-            c = self.window.getch()
-
-            if c == ord('j') or c == ord(' '):
-                self.next_slide()
-            elif c == ord('k'):
-                self.prev_slide()
-            elif c == ord('b'):
-                self.projector_blank = not self.projector_blank
-                self.navigate_current()
-            elif c == ord('a'):
-                self.stopclock_start()
-            elif c == ord('s'):
-                self.stopclock_pause()
-            elif c == ord('d'):
-                self.stopclock_reset()
-            elif c == ord('q'):
-                self.end_children()
-                return
+            command = self.key_bindings.get(self.window.getkey())
+            if command:
+                command()
 
 
 def application(window, argv):
