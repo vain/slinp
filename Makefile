@@ -21,7 +21,7 @@ man1dir = $(mandir)/man1
 all: prescontrol/prescontrol showpdf/showpdf slidenotes/slidenotes \
 	stopclock/stopclock
 
-showpdf/showpdf: showpdf/showpdf.c showpdf/showpdf.h
+showpdf/showpdf: showpdf/showpdf.c
 	$(CC) -Wall -Wextra $(CFLAGS) \
 		-o $@ $< \
 		`pkg-config --cflags --libs gtk+-3.0 poppler-glib`
