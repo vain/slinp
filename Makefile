@@ -26,7 +26,7 @@ showpdf/showpdf: showpdf/showpdf.c
 		-o $@ $< \
 		`pkg-config --cflags --libs gtk+-3.0 poppler-glib`
 
-stopclock/stopclock: stopclock/stopclock.c stopclock/stopclock.h
+stopclock/stopclock: stopclock/stopclock.c
 	$(CC) -Wall -Wextra $(CFLAGS) \
 		-o $@ $< \
 		`pkg-config --cflags --libs gtk+-3.0`
