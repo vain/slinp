@@ -1,4 +1,5 @@
 # Variables for DESTDIR and friends.
+CFLAGS += -Wall -Wextra
 
 INSTALL = install
 INSTALL_PROGRAM = $(INSTALL)
@@ -22,12 +23,12 @@ all: prescontrol/prescontrol showpdf/showpdf slidenotes/slidenotes \
 	stopclock/stopclock
 
 showpdf/showpdf: showpdf/showpdf.c showpdf/showpdf.h
-	$(CC) -Wall -Wextra $(CFLAGS) \
+	$(CC) $(CFLAGS) $(LDFLAGS) \
 		-o $@ $< \
 		`pkg-config --cflags --libs gtk+-3.0 poppler-glib`
 
 stopclock/stopclock: stopclock/stopclock.c stopclock/stopclock.h
-	$(CC) -Wall -Wextra $(CFLAGS) \
+	$(CC) $(CFLAGS) $(LDFLAGS) \
 		-o $@ $< \
 		`pkg-config --cflags --libs gtk+-3.0`
 
