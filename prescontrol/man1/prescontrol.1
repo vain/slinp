@@ -1,8 +1,8 @@
-.TH PRESCONTROL 1 "August 2012" "slinp" "PDF presentation tool chest"
+.TH PRESCONTROL 1 "June 2013" "slinp" "PDF presentation tool chest"
 .SH NAME
 prescontrol \- Do a presentation using the slinp tool chest
 .SH SYNOPSIS
-\fBprescontrol\fP \fIPDFFILE\fP [\fIMINOFF\fP \fIMAXOFF\fP]
+\fBprescontrol\fP [\fB\-l\fP \fILEFT\fP] [\fB\-r\fP \fIRIGHT\fP] \fBFILE\fP
 .SH DESCRIPTION
 \fBprescontrol\fP is the \(lqmain\(rq component of \fBslinp\fP(1) which
 glues all the tools together. It is, however, just an example of what
@@ -15,17 +15,17 @@ attached to it. It will then present you a very minimalistic
 this slide. Use the key bindings as described below. When you quit
 \fBprescontrol\fP, all the other tools will be quit as well.
 .SH OPTIONS
-The term \(lqoffset\(rq means an offset relative to the current slide.
-So \(lqoffset -1\(rq means the previous slide and \(lqoffset 2\(rq means
-the slide after the next slide.
-.P
-By default, \fIMINOFF\fP is \fB-1\fP and \fIMAXOFF\fP is \fB1\fP. This
-means that during the presentation you will see three windows: The
-previous slide, the current slide and the next slide. See \fBLAUNCHED
-TOOLS\fP below on how this is done.
-.P
-Another example: If you set \fIMINOFF\fP to \fB0\fP and \fIMAXOFF\fP to
-\fB2\fP, then you'll see the current slide and the next two slides.
+One of \fBprescontrol\fP's most important features is to show you
+previous slides and upcoming slides. By default, \fBprescontrol\fP will
+show you one previous slide, the current slide and one upcoming slide.
+You can control those numbers using the \fB\-l\fP and \fB\-r\fP
+parameters:
+.TP
+\fB\-l\fP \fILEFT\fP
+Number of previous slides.
+.TP
+\fB\-r\fP \fIRIGHT\fP
+Number of upcoming slides.
 .SH "LAUNCHED TOOLS"
 Let's start with a sketch of the setup:
 .P

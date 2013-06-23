@@ -3,6 +3,7 @@
 import subprocess
 import curses
 import sys
+import argparse
 
 class Presenter(object):
     def __init__(self, window, path):
@@ -159,14 +160,11 @@ class Presenter(object):
                 command()
 
 
-def application(window, argv):
-    """Fire up the applications. Use "argv" to customize the preview windows."""
-    p = Presenter(window, argv[0])
+def application(window, args):
+    """Fire up the applications."""
+    p = Presenter(window, args.filename)
     p.read_pdf_meta()
-    if len(argv) == 1:
-        p.launch_preview_range(-1, 1)
-    else:
-        p.launch_preview_range(int(argv[1]), int(argv[2]))
+    p.launch_preview_range(-args.left, args.right)
     p.launch_projector()
     p.launch_stopclock()
     p.navigate_current()
@@ -174,8 +172,17 @@ def application(window, argv):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', metavar='FILE',
+                        help='path to PDF file')
+    parser.add_argument('-l', metavar='LEFT', type=int, default=1,
+                        help='number of previous slides to show')
+    parser.add_argument('-r', metavar='RIGHT', type=int, default=1,
+                        help='number of upcoming slides to show')
+    args = parser.parse_args()
+
     try:
-        curses.wrapper(application, sys.argv[1:])
+        curses.wrapper(application, args)
     except KeyboardInterrupt:
         pass
 
