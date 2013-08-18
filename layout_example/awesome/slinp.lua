@@ -60,5 +60,3 @@ function arrange(p)
         slaves[i]:geometry(g)
     end
 end
-
--- vim: set et :

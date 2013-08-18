@@ -12,5 +12,3 @@ def curscreen():
 if __name__ == '__main__':
     rect = curscreen()
     print '%d %d %d %d' % (rect.width, rect.height, rect.x, rect.y)
-
-# vim: set ts=4 sw=4 et :

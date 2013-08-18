@@ -185,6 +185,3 @@ if __name__ == '__main__':
         curses.wrapper(application, args)
     except KeyboardInterrupt:
         pass
-
-
-# vim: set tw=80 ts=4 sw=4 et sta :
