@@ -175,9 +175,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('filename', metavar='FILE',
                         help='path to PDF file')
-    parser.add_argument('-l', metavar='LEFT', type=int, default=1,
+    parser.add_argument('-l', '--left', metavar='LEFT', type=int, default=1,
                         help='number of previous slides to show')
-    parser.add_argument('-r', metavar='RIGHT', type=int, default=1,
+    parser.add_argument('-r', '--right', metavar='RIGHT', type=int, default=1,
                         help='number of upcoming slides to show')
     args = parser.parse_args()
 
