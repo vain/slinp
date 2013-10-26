@@ -151,8 +151,8 @@ static void create_gui(struct application_info *app)
 	update_labels(app);
 
 	font_desc = pango_font_description_from_string(LABEL_FONT);
-	gtk_widget_modify_font(app->gui.clock, font_desc);
-	gtk_widget_modify_font(app->gui.timer, font_desc);
+	gtk_widget_override_font(app->gui.clock, font_desc);
+	gtk_widget_override_font(app->gui.timer, font_desc);
 	pango_font_description_free(font_desc);
 
 	/* Timeout callback. */
