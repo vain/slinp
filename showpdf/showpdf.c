@@ -209,7 +209,6 @@ static void create_gui(struct application_info *app)
 	                 G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(G_OBJECT(app->gui.window), "destroy",
 	                 G_CALLBACK(gtk_main_quit), NULL);
-	gtk_window_set_has_resize_grip(GTK_WINDOW(app->gui.window), FALSE);
 	update_window_title(app);
 
 	/* PDF drawing area. */
