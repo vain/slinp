@@ -131,7 +131,18 @@ static gboolean update_labels(struct application_info *app)
 
 static void create_gui(struct application_info *app)
 {
-	PangoFontDescription *font_desc = NULL;
+	/* Style provider for this screen. */
+	GtkCssProvider *provider = gtk_css_provider_new();
+	GdkDisplay *display = gdk_display_get_default();
+	GdkScreen *screen = gdk_display_get_default_screen(display);
+
+	gtk_style_context_add_provider_for_screen(screen,
+	        GTK_STYLE_PROVIDER(provider),
+	        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	gtk_css_provider_load_from_data(provider,
+	                                "GtkLabel { font: " LABEL_FONT "; }",
+	                                -1, NULL);
+	g_object_unref(provider);
 
 	/* Main window. */
 	app->gui.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -148,11 +159,6 @@ static void create_gui(struct application_info *app)
 	app->gui.clock = gtk_label_new("00:00");
 	app->gui.timer = gtk_label_new("00:00:00");
 	update_labels(app);
-
-	font_desc = pango_font_description_from_string(LABEL_FONT);
-	gtk_widget_override_font(app->gui.clock, font_desc);
-	gtk_widget_override_font(app->gui.timer, font_desc);
-	pango_font_description_free(font_desc);
 
 	/* Timeout callback. */
 	g_timeout_add(500, (GSourceFunc)update_labels, app);
