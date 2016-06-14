@@ -1,0 +1,9 @@
+Release history for slinp
+
+next
+  [Added]
+  - prescontrol supports cursor keys and PageUp/Down.
+
+v15.09 and earlier releases
+  - Sorry, the CHANGES file did not exist back then. Please refer to the
+    Git log.
