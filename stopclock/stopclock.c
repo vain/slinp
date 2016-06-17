@@ -140,7 +140,7 @@ static void create_gui(struct application_info *app)
 	        GTK_STYLE_PROVIDER(provider),
 	        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	gtk_css_provider_load_from_data(provider,
-	                                "GtkLabel { font: " LABEL_FONT "; }",
+	                                "label { font: " LABEL_FONT "; }",
 	                                -1, NULL);
 	g_object_unref(provider);
 
