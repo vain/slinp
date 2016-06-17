@@ -15,6 +15,7 @@ struct gui_info
 
 	GtkWidget *canvas;
 	int canvas_width, canvas_height;
+	gchar *title_prefix;
 };
 
 struct pdf_info
@@ -88,18 +89,25 @@ static gboolean load_pdf(struct application_info *app, char *path)
 static void update_window_title(struct application_info *app)
 {
 	gchar *doc_title = poppler_document_get_title(app->pdf.doc);
-	gchar *window_title = NULL;
+	gchar *window_title = NULL, *pre = NULL;
 
 	if (doc_title == NULL)
 		doc_title = g_strdup("<Untitled>");
 
+	if (app->gui.title_prefix)
+		pre = g_strdup_printf("[%s] ", app->gui.title_prefix);
+	else
+		pre = g_strdup("");
+
 	if (app->pdf.page < 0 || app->pdf.page >= app->pdf.num_pages)
 	{
-		window_title = g_strdup_printf("showpdf: %s", doc_title);
+		window_title = g_strdup_printf("%sshowpdf: %s", pre,
+		                               doc_title);
 	}
 	else
 	{
-		window_title = g_strdup_printf("showpdf: %s [%d/%d]", doc_title,
+		window_title = g_strdup_printf("%sshowpdf: %s [%d/%d]", pre,
+		                               doc_title,
 		                               app->pdf.page + 1,
 		                               app->pdf.num_pages);
 	}
@@ -107,6 +115,7 @@ static void update_window_title(struct application_info *app)
 	gtk_window_set_title(GTK_WINDOW(app->gui.window), window_title);
 
 	g_free(doc_title);
+	g_free(pre);
 	g_free(window_title);
 }
 
@@ -293,22 +302,39 @@ static void setup_watch_stdin(struct application_info *app)
 
 int main(int argc, char *argv[])
 {
+	int opt;
+
 	/* We store everything about this application in this struct. It
 	 * contains several sub-structs. */
-	struct application_info app;
+	struct application_info app = {0};
 
 	/* Initialize Gtk. Must be done before we can do anything related to
 	 * GLib, Poppler or Gtk. */
 	gtk_init(&argc, &argv);
 
-	/* Load the PDF specified as argv[1]. */
-	if (argc < 2)
+	/* Non-Gtk command line options. */
+	while ((opt = getopt(argc, argv, "t:")) != -1)
 	{
-		fprintf(stderr, "main: Path to PDF file required.\n");
+		switch (opt)
+		{
+			case 't':
+				app.gui.title_prefix = optarg;
+				break;
+			default:
+				fprintf(stderr, "Usage: %s [gtk-args] [-t prefix] <pdf>\n",
+				        argv[0]);
+				exit(EXIT_FAILURE);
+		}
+	}
+
+	/* Load the PDF specified as argv[1]. */
+	if (optind >= argc)
+	{
+		fprintf(stderr, "main: Expected path to PDF file after options.\n");
 		exit(EXIT_FAILURE);
 	}
 
-	if (!load_pdf(&app, argv[1]))
+	if (!load_pdf(&app, argv[optind]))
 	{
 		fprintf(stderr, "main: Cannot load PDF, giving up.\n");
 		exit(EXIT_FAILURE);

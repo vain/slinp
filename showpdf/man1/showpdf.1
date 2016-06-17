@@ -2,7 +2,7 @@
 .SH NAME
 showpdf \- display a PDF file
 .SH SYNOPSIS
-\fBshowpdf\fP [\fIGTK-OPTIONS\fP] \fIPDFFILE\fP
+\fBshowpdf\fP [\fIGTK-OPTIONS\fP] [\fB\-t\fP \fIPREFIX\fP] \fIPDFFILE\fP
 .SH DESCRIPTION
 \fBshowpdf\fP opens a single window and shows one page of a PDF file. It
 also reads plain text commands from \fBstdin\fP that allow you to
@@ -10,9 +10,10 @@ navigate in that file.
 .P
 \fBshowpdf\fP is part of \fBslinp\fP(1).
 .SH OPTIONS
-\fBshowpdf\fP itself only expects \fIPDFFILE\fP as a command line
-argument. It does, however, call \fBgtk_init()\fP, so all common Gtk
-options are supported as well. In particular, \fBgtk_init()\fP knows
+\fBshowpdf\fP itself only expects \fIPDFFILE\fP and, optionally,
+\fB\-t\fP as command line arguments. It does, however, call
+\fBgtk_init()\fP, so all common Gtk options are supported as well. In
+particular, \fBgtk_init()\fP knows
 \fB\-\-class\fP and \fB\-\-name\fP:
 .TP
 \fB\-\-class\fP \fIname\fP
@@ -23,6 +24,9 @@ Client instance name as used by the window manager.
 .P
 This gives you a great deal of control over \fBshowpdf\fP and allows you
 to use your window manager to organize \fBshowpdf\fP windows.
+.P
+\fB\-t\fP, on the other hand, can be used to add a prefix string to
+the window title.
 .SH "COMMANDS ON STDIN"
 \fBshowpdf\fP has no widgets for user interaction. The only way to
 control it is to write commands on \fBstdin\fP, one command per line
