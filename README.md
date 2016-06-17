@@ -1,6 +1,6 @@
 slinp -- A PDF presentation tool chest.
 
-[slinp project page](http://www.uninformativ.de/projects/?q=slinp) (german)
+[slinp project page](https://www.uninformativ.de/projects/slinp/)
 
 Released as PIZZA-WARE. See LICENSE.
 
