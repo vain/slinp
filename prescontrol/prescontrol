@@ -56,18 +56,20 @@ class Presenter(object):
     def launch_preview(self, a, b, offset):
         """Launch one instance of "showpdf" (one preview window)."""
         iname = '{0}_{1}_{2}'.format(a, b, offset)
-        self.previews.append( (self.run_showpdf(iname), offset) )
+        self.previews.append( (self.run_showpdf(iname, str(offset)), offset) )
 
     def launch_projector(self):
         """Launch one instance of "showpdf", the projector window."""
-        self.projector = self.run_showpdf('projector')
+        self.projector = self.run_showpdf('projector', 'PROJECTOR')
 
-    def run_showpdf(self, instance_name):
+    def run_showpdf(self, instance_name, prefix=''):
         """Run "showpdf" and return the Popen object."""
         p = subprocess.Popen([
                                   'showpdf',
                                   '--name',
                                   instance_name,
+                                  '-t',
+                                  prefix,
                                   self.path
                              ],
                              bufsize=0, stdin=subprocess.PIPE)
