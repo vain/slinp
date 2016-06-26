@@ -1,6 +1,10 @@
 Release history for slinp
 
-next
+v16.06  2016-06-26
+  [Fixed]
+  - Font size of stopclock is properly set when using Gtk 3.20
+    (backwards incompatible).
+
   [Added]
   - prescontrol supports cursor keys and PageUp/Down.
   - showpdf's window titles are prefixed with a short string that
