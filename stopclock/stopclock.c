@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 /* Font for the two labels. */
-#define LABEL_FONT "Serif 64"
+#define FONT_FAMILY "Serif"
+#define FONT_SIZE "750%"
 
 struct gui_info
 {
@@ -140,7 +141,10 @@ static void create_gui(struct application_info *app)
             GTK_STYLE_PROVIDER(provider),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     gtk_css_provider_load_from_data(provider,
-                                    "label { font: " LABEL_FONT "; }",
+                                    "label {"
+                                    "  font-family: " FONT_FAMILY ";"
+                                    "  font-size: " FONT_SIZE ";"
+                                    "}",
                                     -1, NULL);
     g_object_unref(provider);
 

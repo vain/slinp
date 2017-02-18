@@ -1,5 +1,10 @@
 Release history for slinp
 
+next
+  [Fixed]
+  - Font size of stopclock: Use CSS syntax instead of the deprecated
+    pango syntax (possibly backwards incompatible).
+
 v16.06  2016-06-26
   [Fixed]
   - Font size of stopclock is properly set when using Gtk 3.20
