@@ -1,6 +1,6 @@
 Release history for slinp
 
-next
+v17.02  2017-02-26
   [Fixed]
   - Font size of stopclock: Use CSS syntax instead of the deprecated
     pango syntax (possibly backwards incompatible).
