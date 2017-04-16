@@ -4,6 +4,7 @@ next
   [Fixed]
   - Fixed error handling of g_filename_to_uri() in showpdf.
   - prescontrol no longer crashes if notes exceed the available space.
+  - prescontrol now properly clears the window before drawing to it.
 
   [Changed]
   - prescontrol: Improved usability / eye candy:

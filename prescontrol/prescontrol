@@ -110,7 +110,7 @@ class Presenter(object):
 
     def show_current_info(self):
         """Show current slide number and the slide's notes."""
-        self.window.erase()
+        self.window.clear()
         (height, width) = self.window.getmaxyx()
 
         bar_attrs = curses.color_pair(1) | curses.A_BOLD
