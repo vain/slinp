@@ -5,8 +5,10 @@ next
   - Fixed error handling of g_filename_to_uri() in showpdf.
   - prescontrol no longer crashes if notes exceed the available space.
 
-  [Added]
-  - Show a little help message about available keys in prescontrol.
+  [Changed]
+  - prescontrol: Improved usability / eye candy:
+    - Show help message about available keys.
+    - Use colors for bars.
 
 v17.02  2017-02-26
   [Fixed]

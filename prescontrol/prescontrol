@@ -37,9 +37,12 @@ class Presenter(object):
         # available space) but the most important ones. That's good
         # enough. Especially, it shows the keys to control the
         # stopwatch.
-        self.key_help = 'j:Next k:Prev b:Blank a:ClkStart s:ClkPause d:ClkReset ' \
-                        'q:quit'
+        self.key_help = 'j:Next  k:Prev  b:Blank  a:ClkStart  s:ClkPause  ' \
+                        'd:ClkReset  q:quit'
 
+        curses.start_color()
+        curses.use_default_colors()
+        curses.init_pair(1, -1, curses.COLOR_BLUE)
         curses.curs_set(0)
 
     def addstr_noerr(self, *args, **kwargs):
@@ -110,16 +113,19 @@ class Presenter(object):
         self.window.erase()
         (height, width) = self.window.getmaxyx()
 
-        self.addstr_noerr(0, 2, '--> {0} <--'.format(self.page))
+        bar_attrs = curses.color_pair(1) | curses.A_BOLD
 
-        line_number = 2
+        page_info = '{} of {}'.format(self.page, self.num_pages)
+        self.addstr_noerr(0, 0, page_info.center(width), bar_attrs)
+
+        line_number = 1
         for line in self.notes:
             self.addstr_noerr(line_number, 0, line)
             line_number += 1
             if line_number == height:
                 break
 
-        self.addstr_noerr(height - 1, 0, self.key_help)
+        self.addstr_noerr(height - 1, 0, self.key_help.ljust(width), bar_attrs)
 
     def navigate_current(self):
         """Issue a "go_page n" in all instance of "showpdf", read notes."""
