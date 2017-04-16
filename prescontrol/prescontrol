@@ -33,6 +33,14 @@ class Presenter(object):
             'd': self.stopclock_reset,
             'q': self.shutdown,
         }
+        # This message doesn't show ALL keys (which would exceed the
+        # available space) but the most important ones. That's good
+        # enough. Especially, it shows the keys to control the
+        # stopwatch.
+        self.key_help = 'j:Next k:Prev b:Blank a:ClkStart s:ClkPause d:ClkReset ' \
+                        'q:quit'
+
+        curses.curs_set(0)
 
     def read_pdf_meta(self):
         """Read PDF metadata using "pdfinfo".
@@ -104,6 +112,8 @@ class Presenter(object):
             line_number += 1
             if line_number == height:
                 break
+
+        self.window.addstr(height - 1, 0, self.key_help)
 
     def navigate_current(self):
         """Issue a "go_page n" in all instance of "showpdf", read notes."""

@@ -4,6 +4,9 @@ next
   [Fixed]
   - Fixed error handling of g_filename_to_uri() in showpdf.
 
+  [Added]
+  - Show a little help message about available keys in prescontrol.
+
 v17.02  2017-02-26
   [Fixed]
   - Font size of stopclock: Use CSS syntax instead of the deprecated
