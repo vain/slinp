@@ -59,8 +59,8 @@ static gboolean load_pdf(struct application_info *app, char *path)
 
     if (uri == NULL)
     {
-        printf("load_pdf: %s\n", err->message);
-        return 1;
+        fprintf(stderr, "load_pdf: %s\n", err->message);
+        return FALSE;
     }
 
     /* Load the file via its URI. */
