@@ -3,6 +3,7 @@ Release history for slinp
 next
   [Fixed]
   - Fixed error handling of g_filename_to_uri() in showpdf.
+  - prescontrol no longer crashes if notes exceed the available space.
 
   [Added]
   - Show a little help message about available keys in prescontrol.

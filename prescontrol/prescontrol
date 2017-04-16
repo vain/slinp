@@ -42,6 +42,12 @@ class Presenter(object):
 
         curses.curs_set(0)
 
+    def addstr_noerr(self, *args, **kwargs):
+        try:
+            self.window.addstr(*args, **kwargs)
+        except curses.error:
+            pass
+
     def read_pdf_meta(self):
         """Read PDF metadata using "pdfinfo".
 
@@ -104,16 +110,16 @@ class Presenter(object):
         self.window.erase()
         (height, width) = self.window.getmaxyx()
 
-        self.window.addstr(0, 2, '--> {0} <--'.format(self.page))
+        self.addstr_noerr(0, 2, '--> {0} <--'.format(self.page))
 
         line_number = 2
         for line in self.notes:
-            self.window.addstr(line_number, 0, line)
+            self.addstr_noerr(line_number, 0, line)
             line_number += 1
             if line_number == height:
                 break
 
-        self.window.addstr(height - 1, 0, self.key_help)
+        self.addstr_noerr(height - 1, 0, self.key_help)
 
     def navigate_current(self):
         """Issue a "go_page n" in all instance of "showpdf", read notes."""
