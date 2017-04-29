@@ -1,6 +1,6 @@
 Release history for slinp
 
-next
+v17.04  2017-04-29
   [Fixed]
   - Fixed error handling of g_filename_to_uri() in showpdf.
   - prescontrol no longer crashes if notes exceed the available space.
